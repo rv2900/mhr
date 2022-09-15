@@ -26,7 +26,16 @@
 
             <select id="armor_select">
             </select>
-            <span class="result"></span>
+            <div id="armor_id"></div>
+            <div id="armor_name"></div>
+            <div id="armor_rank"></div>
+            <div id="armor_slot"></div>
+            <div id="def_f"></div>
+            <div id="def_w"></div>
+            <div id="def_t"></div>
+            <div id="def_i"></div>
+            <div id="def_d"></div>
+            <div id="armor_skill"></div>
         </form>
     </div>
     <script>
@@ -37,14 +46,53 @@
                 var opt = document.createElement("option");
                 opt.value = o["id"].toString() + "_" + o["parts_id"].toString();
                 opt.text = o["name"];
-                armor_sel.add(opt);
+                armor_sel.append(opt);
             }
         }
         armor_sel.addEventListener('change', (event) => {
-            const result = document.querySelector('.result');
+            let div_armor_id = document.getElementById("armor_id");
+            let div_armor_name = document.getElementById("armor_name");
+            let div_armor_rank = document.getElementById("armor_rank");
+            let div_armor_slot = document.getElementById("armor_slot");
+            let div_def_f = document.getElementById("def_f");
+            let div_def_w = document.getElementById("def_w");
+            let div_def_t = document.getElementById("def_t");
+            let div_def_i = document.getElementById("def_i");
+            let div_def_d = document.getElementById("def_d");
+            let div_armor_skill = document.getElementById("armor_skill");
+
             id = event.target.value;
             var o = armor_list[id];
-            result.textContent = `You like ${o["name"]}`;
+
+            div_armor_id.textContent = `ID: ${o["id"] + "_" + o["parts_id"]}`;
+            div_armor_name.textContent = `Name: ${o["name"]}`;
+            div_armor_rank.textContent = `Rank: ${o["rank"]}`;
+            let slot = "";
+            for (let i = 4; i > 0; i--) {
+                let count = o[`slotLv${i}`];
+                for (let j = 0; j < count; j++) {
+                    slot = slot + i;
+                }
+            }
+            if (slot.length < 3) {
+                for (let i = 0; i < 4 - slot.length; i++) {
+                    slot = slot + "-";
+                }
+            }
+            div_armor_slot.textContent = `Slot: ${slot}`;
+            div_def_f.textContent = `火: ${o["def_f"]}`;
+            div_def_w.textContent = `水: ${o["def_w"]}`;
+            div_def_t.textContent = `雷: ${o["def_t"]}`;
+            div_def_i.textContent = `氷: ${o["def_i"]}`;
+            div_def_d.textContent = `龍: ${o["def_d"]}`;
+
+            div_armor_skill.innerHTML = "";
+            for (i in o["skill"]) {
+                let skill = `${o["skill"][i]["sname"]}: Lv${o["skill"][i]["lv"]}`;
+                let skill_node = document.createElement("div");
+                skill_node.textContent = skill;
+                div_armor_skill.append(skill_node);
+            }
         });
     </script>
 </body>
