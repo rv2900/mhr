@@ -13,6 +13,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/MHR_Armor_forsim.js"></script>
+    <script src="js/armor_pool_cost.js"></script>
+    <script src="js/skill_hex_cost.js"></script>
+    <script src="js/cost_skill_hex.js"></script>
+    <script src="js/k_skill_add.js"></script>
 </head>
 
 <body>
@@ -25,31 +29,50 @@
             <label>Choose An armor</label>
 
             <select id="armor_select">
+                <option value="">-----</option>
             </select>
-            <div id="armor_id"></div>
-            <div id="armor_name"></div>
-            <div id="armor_rank"></div>
-            <div id="armor_slot"></div>
-            <div id="def_f"></div>
-            <div id="def_w"></div>
-            <div id="def_t"></div>
-            <div id="def_i"></div>
-            <div id="def_d"></div>
-            <div id="armor_skill"></div>
+            <div id="result">
+                <div id="armor_id"></div>
+                <div id="armor_name"></div>
+                <div id="armor_rank"></div>
+                <div id="armor_slot"></div>
+                <div id="def_f"></div>
+                <div id="def_w"></div>
+                <div id="def_t"></div>
+                <div id="def_i"></div>
+                <div id="def_d"></div>
+                <div id="armor_skill"></div>
+                <div id="armor_pool"></div>
+                <div id="armor_cost"></div>
+                <div id="k_skill_select_0"><select id="k_skill_0"><option value="00_0_0">-----</option></select><select id="armor_original_skill_0"><option>-----</option></select><select id="armor_new_skill_0"><option>-----</option></select></div>
+                <div id="k_skill_select_1"><select id="k_skill_1"><option value="00_0_1">-----</option></select><select id="armor_original_skill_1"><option>-----</option></select><select id="armor_new_skill_1"><option>-----</option></select></div>
+                <div id="k_skill_select_2"><select id="k_skill_2"><option value="00_0_2">-----</option></select><select id="armor_original_skill_2"><option>-----</option></select><select id="armor_new_skill_2"><option>-----</option></select></div>
+                <div id="k_skill_select_3"><select id="k_skill_3"><option value="00_0_3">-----</option></select><select id="armor_original_skill_3"><option>-----</option></select><select id="armor_new_skill_3"><option>-----</option></select></div>
+                <div id="k_skill_select_4"><select id="k_skill_4"><option value="00_0_4">-----</option></select><select id="armor_original_skill_4"><option>-----</option></select><select id="armor_new_skill_4"><option>-----</option></select></div>
+                <div id="k_skill_select_5"><select id="k_skill_5"><option value="00_0_5">-----</option></select><select id="armor_original_skill_5"><option>-----</option></select><select id="armor_new_skill_5"><option>-----</option></select></div>
+                <div id="k_skill_select_6"><select id="k_skill_6"><option value="00_0_6">-----</option></select><select id="armor_original_skill_6"><option>-----</option></select><select id="armor_new_skill_6"><option>-----</option></select></div>
+                
+            </div>
         </form>
     </div>
     <script>
         armor_sel = document.getElementById("armor_select");
         for (i in armor_list) {
             var o = armor_list[i];
-            if (o["rank"] > 7) {
-                var opt = document.createElement("option");
+            if (o["rank"] > 7 & o["bougyo"] > 0) {
+                let opt = document.createElement("option");
                 opt.value = o["id"].toString() + "_" + o["parts_id"].toString();
                 opt.text = o["name"];
-                armor_sel.append(opt);
+                armor_sel.appendChild(opt);
             }
         }
         armor_sel.addEventListener('change', (event) => {
+            if (event.target.value == "") {
+                document.getElementById("result").innerHTML="";
+                return;
+            }
+            
+
             let div_armor_id = document.getElementById("armor_id");
             let div_armor_name = document.getElementById("armor_name");
             let div_armor_rank = document.getElementById("armor_rank");
@@ -60,6 +83,8 @@
             let div_def_i = document.getElementById("def_i");
             let div_def_d = document.getElementById("def_d");
             let div_armor_skill = document.getElementById("armor_skill");
+            let div_armor_pool = document.getElementById("armor_pool");
+            let div_armor_cost = document.getElementById("armor_cost");
 
             id = event.target.value;
             var o = armor_list[id];
@@ -92,6 +117,64 @@
                 let skill_node = document.createElement("div");
                 skill_node.textContent = skill;
                 div_armor_skill.append(skill_node);
+            }
+            pool_id = armor_pool_cost[`${o["id"]}`]["pool"];
+            armor_cost = armor_pool_cost[`${o["id"]}`]["cost"];
+            div_armor_pool.textContent = `Pool Id: ${pool_id}`;
+            div_armor_cost.textContent = `Armor Cost: ${armor_cost}`;
+
+            k_skills = k_skill_add[pool_id.toString()];
+            let k_skills_cost_list = [0, 0, 0, 0, 0, 0, 0];
+            var k_skills_hex_list = ["00", "00", "00", "00", "00", "00", "00"];
+            for (let i = 0; i < 7; i++) {
+                let k_skill_sel = document.getElementById(`k_skill_${i}`);
+                k_skill_sel.innerHTML = `<option value="00_0_${i}">-----</option>`;
+                for (j in k_skills) {
+                    let opt = document.createElement("option");
+                    opt.value = k_skills[j]["hex"] + "_" + k_skills[j]["cost"] + `_${i}`;
+                    opt.text = k_skills[j]["name"] + " cost: " + k_skills[j]["cost"];
+                    k_skill_sel.appendChild(opt);
+                }
+                k_skill_sel.addEventListener("change", (event) => {
+                    let t_values = event.target.value.split('_');
+                    let k_skill_hex = t_values[0];
+                    let k_skill_cost = parseInt(t_values[1]);
+                    let k_skill_no = parseInt(t_values[2]); // from 0 to 6
+                    k_skills_cost_list[k_skill_no] = k_skill_cost;
+                    k_skills_hex_list[k_skill_no] = k_skill_hex;
+                    console.log(k_skills_cost_list.toString());
+                    console.log(k_skills_hex_list.toString());
+                    let sum = k_skills_cost_list.reduce((partialSum, a) => partialSum + a, 0);
+                    div_armor_cost.textContent = `Armor Cost: ${armor_cost - sum}`;
+                    
+                    // remove skill hex 0x95
+                    if (k_skill_hex == "95") {
+                        sel_armor_original_skill = document.getElementById(`armor_original_skill_${i}`);
+                        for (let i in o["skill"]) {
+                            opt = document.createElement("option");
+                            sname = o["skill"][i]["sname"];
+                            slv = o["skill"][i]["lv"];
+                            opt.text = sname + " Lv: " + slv;
+                            shex = skill_hex_cost[sname]["hex"];
+                            opt.value = shex;
+
+                            sel_armor_original_skill.appendChild(opt);
+                        }
+                    } else if (["dummy", "90", "91", "92", "93", "94"].indexOf(k_skill_hex) > 0) {
+                        console.log(k_skill_hex);
+                        sel_armor_new_skill = document.getElementById(`armor_new_skill_${i}`);
+                        cost_skill_list = cost_skill_hex[t_values[1]];
+                        for (i in cost_skill_list) {
+                            let opt = document.createElement("option")
+                            let sname = cost_skill_list[i]["sname"];
+                            let hex = cost_skill_list[i]["hex"];
+                            opt.value = hex;
+                            opt.text = sname;
+                            sel_armor_new_skill.appendChild(opt);
+                        }
+                    }
+
+                });
             }
         });
     </script>
