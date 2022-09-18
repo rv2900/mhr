@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MHR Sunbreak</title>
+    <title>モンスターハンターライズ・サンブレイク　傀異錬成チートコード</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/MHR_Armor_forsim.js"></script>
     <script src="js/armor_pool_cost.js"></script>
     <script src="js/skill_hex_cost.js"></script>
@@ -16,15 +17,16 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>MHR Sunbreak Kaiirensei Cheat</h1>
+    <div class="container mt-2">
+        <h2>傀異錬成チートコード</h2>
         <form>
-            <label>Choose An armor: </label>
-
-            <select id="armor_select">
+            <label class="form-label">装備を選んでください：</label>
+            <select class="form-select-sm" id="armor_select" name="armor_select">
                 <option value="">-----</option>
             </select>
-            <label>Box Position: </label><select id="armor_pos">
+            <br>
+            <label class="form-label">装備ボックス位置　　：</label>
+            <select class="form-select-sm" id="armor_pos" name="armor_pos">
                 <option value="20_1">1</option>
                 <option value="28_2">2</option>
                 <option value="30_3">3</option>
@@ -32,31 +34,45 @@
                 <option value="40_5">5</option>
             </select>
             <div id="result">
-                <div id="armor_id"></div>
-                <div id="armor_name"></div>
-                <div id="armor_rank"></div>
-                <div id="armor_slot"></div>
-                <div id="def_f"></div>
-                <div id="def_w"></div>
-                <div id="def_t"></div>
-                <div id="def_i"></div>
-                <div id="def_d"></div>
-                <div id="armor_skill"></div>
-                <div id="armor_pool"></div>
-                <div id="armor_cost"></div>
-                <div id="k_skill_select_0"><select id="k_skill_0"><option value="00_0_0">-----</option></select><select id="armor_original_skill_0"><option value="00_0">-----</option></select><select id="armor_new_skill_0"><option value="00_0">-----</option></select></div>
-                <div id="k_skill_select_1"><select id="k_skill_1"><option value="00_0_1">-----</option></select><select id="armor_original_skill_1"><option value="00_1">-----</option></select><select id="armor_new_skill_1"><option value="00_1">-----</option></select></div>
-                <div id="k_skill_select_2"><select id="k_skill_2"><option value="00_0_2">-----</option></select><select id="armor_original_skill_2"><option value="00_2">-----</option></select><select id="armor_new_skill_2"><option value="00_2">-----</option></select></div>
-                <div id="k_skill_select_3"><select id="k_skill_3"><option value="00_0_3">-----</option></select><select id="armor_original_skill_3"><option value="00_3">-----</option></select><select id="armor_new_skill_3"><option value="00_3">-----</option></select></div>
-                <div id="k_skill_select_4"><select id="k_skill_4"><option value="00_0_4">-----</option></select><select id="armor_original_skill_4"><option value="00_4">-----</option></select><select id="armor_new_skill_4"><option value="00_4">-----</option></select></div>
-                <div id="k_skill_select_5"><select id="k_skill_5"><option value="00_0_5">-----</option></select><select id="armor_original_skill_5"><option value="00_5">-----</option></select><select id="armor_new_skill_5"><option value="00_5">-----</option></select></div>
-                <div id="k_skill_select_6"><select id="k_skill_6"><option value="00_0_6">-----</option></select><select id="armor_original_skill_6"><option value="00_6">-----</option></select><select id="armor_new_skill_6"><option value="00_6">-----</option></select></div>
+                <div id="armor_id">ID: </div>
+                <div id="armor_pool">Pool Id: </div>
                 
+                <div id="armor_rank">Rank: </div>
+                <div class="alert alert-success" id="armor_slot">Slot: </div>
+                <div class="row bg-light p-2 m-2">
+                    <div class="col list-group-item-danger" id="def_f">火: </div>
+                    <div class="col list-group-item-primary" id="def_w">水: </div>
+                    <div class="col list-group-item-warning" id="def_t">雷: </div>
+                    <div class="col list-group-item-info" id="def_i">氷: </div>
+                    <div class="col list-group-item-dark" id="def_d">龍: </div>
+                </div>
+                <ul class="list-group p-1" id="armor_skill"></ul>
+                <div class="alert alert-danger" id="armor_cost">Armor Cost: </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="small">錬成項目</th>
+                            <th class="small">削除スキル</th>
+                            <th class="small">追加スキル</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr><td><select class="form-select" id="k_skill_0"><option value="00_0_0">-----</option></select></td><td><select class="form-select" id="armor_original_skill_0"><option value="00_0">-----</option></select></td><td><select class="form-select" id="armor_new_skill_0"><option value="00_0">-----</option></select></td></tr>
+                            <tr><td><select class="form-select" id="k_skill_1"><option value="00_0_1">-----</option></select></td><td><select class="form-select" id="armor_original_skill_1"><option value="00_1">-----</option></select></td><td><select class="form-select" id="armor_new_skill_1"><option value="00_1">-----</option></select></td></tr>
+                            <tr><td><select class="form-select" id="k_skill_2"><option value="00_0_2">-----</option></select></td><td><select class="form-select" id="armor_original_skill_2"><option value="00_2">-----</option></select></td><td><select class="form-select" id="armor_new_skill_2"><option value="00_2">-----</option></select></td></tr>
+                            <tr><td><select class="form-select" id="k_skill_3"><option value="00_0_3">-----</option></select></td><td><select class="form-select" id="armor_original_skill_3"><option value="00_3">-----</option></select></td><td><select class="form-select" id="armor_new_skill_3"><option value="00_3">-----</option></select></td></tr>
+                            <tr><td><select class="form-select" id="k_skill_4"><option value="00_0_4">-----</option></select></td><td><select class="form-select" id="armor_original_skill_4"><option value="00_4">-----</option></select></td><td><select class="form-select" id="armor_new_skill_4"><option value="00_4">-----</option></select></td></tr>
+                            <tr><td><select class="form-select" id="k_skill_5"><option value="00_0_5">-----</option></select></td><td><select class="form-select" id="armor_original_skill_5"><option value="00_5">-----</option></select></td><td><select class="form-select" id="armor_new_skill_5"><option value="00_5">-----</option></select></td></tr>
+                            <tr><td><select class="form-select" id="k_skill_6"><option value="00_0_6">-----</option></select></td><td><select class="form-select" id="armor_original_skill_6"><option value="00_6">-----</option></select></td><td><select class="form-select" id="armor_new_skill_6"><option value="00_6">-----</option></select></td></tr>
+                    </tbody>
+                    
+                </table>
             </div>
-            <button type="button" id="gen_template" onclick="genTemplate()">Gen Template</button>
-            <button type="button" id="copy_to_clipboard" onclick="copyToClipboard()">Copy</button><label id="copy_result"></label>
+            <button class="btn btn-primary" type="button" id="gen_template" onclick="genTemplate()">Gen Template</button>
+            <button class="btn btn-outline-secondary" type="button" id="copy_to_clipboard" onclick="copyToClipboard()">Copy</button>
+            <label class="text-success" id="copy_result"></label>
         </form>
-        <div id="template_result"></div>
+        <blockquote class="blockquote" id="template_result"></blockquote>
     </div>
     <script src="js/main.js"></script>
 </body>

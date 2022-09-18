@@ -46,7 +46,7 @@ armor_sel.addEventListener("change", (event) => {
     document.getElementById("copy_result").innerText = "";
 
     let div_armor_id = document.getElementById("armor_id");
-    let div_armor_name = document.getElementById("armor_name");
+    let div_armor_pool = document.getElementById("armor_pool");
     let div_armor_rank = document.getElementById("armor_rank");
     let div_armor_slot = document.getElementById("armor_slot");
     let div_def_f = document.getElementById("def_f");
@@ -55,7 +55,6 @@ armor_sel.addEventListener("change", (event) => {
     let div_def_i = document.getElementById("def_i");
     let div_def_d = document.getElementById("def_d");
     let div_armor_skill = document.getElementById("armor_skill");
-    let div_armor_pool = document.getElementById("armor_pool");
     let div_armor_cost = document.getElementById("armor_cost");
 
     id = event.target.value;
@@ -64,7 +63,6 @@ armor_sel.addEventListener("change", (event) => {
     k_result["eq_name"] = o["name"];
 
     div_armor_id.textContent = `ID: ${o["id"] + "_" + o["parts_id"]}`;
-    div_armor_name.textContent = `Name: ${o["name"]}`;
     div_armor_rank.textContent = `Rank: ${o["rank"]}`;
     let slot = "";
     for (let i = 4; i > 0; i--) {
@@ -90,7 +88,8 @@ armor_sel.addEventListener("change", (event) => {
         let sname = o["skill"][i]["sname"];
         let lv = o["skill"][i]["lv"];
         let skill = `${sname}: Lv${lv}`;
-        let skill_node = document.createElement("div");
+        let skill_node = document.createElement("li");
+        skill_node.className = "list-group-item";
         skill_node.textContent = skill;
         div_armor_skill.append(skill_node);
     }
