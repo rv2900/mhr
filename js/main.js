@@ -45,9 +45,6 @@ armor_sel.addEventListener("change", (event) => {
 
     document.getElementById("copy_result").innerText = "";
 
-    let div_armor_id = document.getElementById("armor_id");
-    let div_armor_pool = document.getElementById("armor_pool");
-    let div_armor_rank = document.getElementById("armor_rank");
     let div_armor_slot = document.getElementById("armor_slot");
     let div_def_f = document.getElementById("def_f");
     let div_def_w = document.getElementById("def_w");
@@ -62,8 +59,6 @@ armor_sel.addEventListener("change", (event) => {
 
     k_result["eq_name"] = o["name"];
 
-    div_armor_id.textContent = `ID: ${o["id"] + "_" + o["parts_id"]}`;
-    div_armor_rank.textContent = `Rank: ${o["rank"]}`;
     let slot = "";
     for (let i = 4; i > 0; i--) {
         let count = o[`slotLv${i}`];
@@ -97,7 +92,6 @@ armor_sel.addEventListener("change", (event) => {
 
     pool_id = armor_pool_cost[`${o["id"]}`]["pool"];
     armor_cost = armor_pool_cost[`${o["id"]}`]["cost"];
-    div_armor_pool.textContent = `Pool Id: ${pool_id}`;
     div_armor_cost.textContent = `Armor Cost: ${armor_cost}`;
 
     k_skills = k_skill_add[pool_id.toString()];
