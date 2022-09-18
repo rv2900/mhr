@@ -1,5 +1,4 @@
 cost_skill_hex = {
-
     "15": [
     { sname: "攻撃", hex: "01" },
     { sname: "見切り", hex: "06" },

@@ -87,11 +87,15 @@ armor_sel.addEventListener("change", (event) => {
 
     div_armor_skill.innerHTML = "";
     for (i in o["skill"]) {
-        let skill = `${o["skill"][i]["sname"]}: Lv${o["skill"][i]["lv"]}`;
+        let sname = o["skill"][i]["sname"];
+        let lv = o["skill"][i]["lv"];
+        let skill = `${sname}: Lv${lv}`;
         let skill_node = document.createElement("div");
         skill_node.textContent = skill;
         div_armor_skill.append(skill_node);
     }
+
+
     pool_id = armor_pool_cost[`${o["id"]}`]["pool"];
     armor_cost = armor_pool_cost[`${o["id"]}`]["cost"];
     div_armor_pool.textContent = `Pool Id: ${pool_id}`;
@@ -122,17 +126,13 @@ armor_sel.addEventListener("change", (event) => {
 
             k_skills_cost_list[k_skill_no] = k_skill_cost;
             k_skills_hex_list[k_skill_no] = k_skill_hex;
-            console.log(k_skills_cost_list.toString());
-            console.log(k_skills_hex_list.toString());
             let sum = k_skills_cost_list.reduce((partialSum, a) => partialSum + a, 0);
             div_armor_cost.textContent = `Armor Cost: ${armor_cost - sum}`;
             
+            // delete skill hex 0x95
             if (k_skill_hex == "95") {
                 sel_armor_original_skill = document.getElementById(`armor_original_skill_${i}`);
                 sel_armor_original_skill.innerHTML = `<option value=\"00_${i}\">-----</option>`;
-
-                // sel_armor_new_skill = document.getElementById(`armor_new_skill_${i}`);
-                // sel_armor_new_skill.innerHTML = `<option value=\"00_${i}\">-----</option>`;
 
                 for (let j in o["skill"]) {
                     opt = document.createElement("option");
@@ -147,10 +147,8 @@ armor_sel.addEventListener("change", (event) => {
                     let t_values = event.target.value.split("_");
                     k_result["k_skill"][t_values[1]]["k_skill_edit_hex"] = t_values[0]; 
                 });
+            // add skill hex 0x90 to 0x94
             } else if (["90", "91", "92", "93", "94"].includes(k_skill_hex)) {
-                // sel_armor_original_skill = document.getElementById(`armor_original_skill_${i}`);
-                // sel_armor_original_skill.innerHTML = `<option value=\"00_${i}\">-----</option>`;
-
                 sel_armor_new_skill = document.getElementById(`armor_new_skill_${i}`);
                 sel_armor_new_skill.innerHTML = `<option value=\"00_${i}\">-----</option>`;
                 cost_skill_list = cost_skill_hex[t_values[1]];
