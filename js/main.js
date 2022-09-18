@@ -71,7 +71,7 @@ armor_sel.addEventListener("change", (event) => {
             slot = slot + "-";
         }
     }
-    div_armor_slot.textContent = `Slot: ${slot}`;
+    div_armor_slot.textContent = `スロット：${slot}`;
     div_def_f.textContent = `火: ${o["def_f"]}`;
     div_def_w.textContent = `水: ${o["def_w"]}`;
     div_def_t.textContent = `雷: ${o["def_t"]}`;
@@ -82,7 +82,7 @@ armor_sel.addEventListener("change", (event) => {
     for (i in o["skill"]) {
         let sname = o["skill"][i]["sname"];
         let lv = o["skill"][i]["lv"];
-        let skill = `${sname}: Lv${lv}`;
+        let skill = `${sname}：Lv${lv}`;
         let skill_node = document.createElement("li");
         skill_node.className = "list-group-item";
         skill_node.textContent = skill;
