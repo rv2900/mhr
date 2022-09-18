@@ -31,6 +31,9 @@ k_skill_add = {
     { hex: "8B", name: "スロット+1", cost: 6 },
     { hex: "8C", name: "スロット+2", cost: 12 },
     { hex: "8D", name: "スロット+3", cost: 18 },
+    { hex: "46", name:	"防御+4", cost:	2 },
+    { hex: "47", name:	"防御+6", cost:	3 },
+    { hex: "48", name:	"防御+7", cost:	4 },
   ],
   "2": [
     { hex: "45", name: "防御+2", cost: 1 },
@@ -64,6 +67,9 @@ k_skill_add = {
     { hex: "8B", name: "スロット+1", cost: 6 },
     { hex: "8C", name: "スロット+2", cost: 12 },
     { hex: "8D", name: "スロット+3", cost: 18 },
+    { hex: "46", name:	"防御+3", cost:	2 },
+    { hex: "47", name:	"防御+4", cost:	3 },
+    { hex: "48", name:	"防御+6", cost:	4 },
   ],
   "3": [
     { hex: "45", name: "防御+2", cost: 1 },
@@ -97,6 +103,9 @@ k_skill_add = {
     { hex: "8B", name: "スロット+1", cost: 6 },
     { hex: "8C", name: "スロット+2", cost: 12 },
     { hex: "8D", name: "スロット+3", cost: 18 },
+    { hex: "46", name:	"防御+3", cost:	2 },
+    { hex: "47", name:	"防御+4", cost:	3 },
+    { hex: "48", name:	"防御+6", cost:	4 },
   ],
   "4": [
     { hex: "45", name: "防御+1", cost: 1 },
@@ -130,6 +139,9 @@ k_skill_add = {
     { hex: "8B", name: "スロット+1", cost: 6 },
     { hex: "8C", name: "スロット+2", cost: 12 },
     { hex: "8D", name: "スロット+3", cost: 18 },
+    { hex: "46", name:	"防御+3", cost:	2 },
+    { hex: "47", name:	"防御+4", cost:	3 },
+    { hex: "48", name:	"防御+5", cost:	4 },
   ],
   "5": [
     { hex: "45", name: "防御+1", cost: 1 },
@@ -163,6 +175,9 @@ k_skill_add = {
     { hex: "8B", name: "スロット+1", cost: 6 },
     { hex: "8C", name: "スロット+2", cost: 12 },
     { hex: "8D", name: "スロット+3", cost: 18 },
+    { hex: "46", name:	"防御+2", cost:	2 },
+    { hex: "47", name:	"防御+3", cost:	3 },
+    { hex: "48", name:	"防御+4", cost:	4 },
   ],
   "6": [
     { hex: "45", name: "防御+1", cost: 1 },
@@ -196,6 +211,9 @@ k_skill_add = {
     { hex: "8B", name: "スロット+1", cost: 6 },
     { hex: "8C", name: "スロット+2", cost: 12 },
     { hex: "8D", name: "スロット+3", cost: 18 },
+    { hex: "46", name:	"防御+1", cost:	2 },
+    { hex: "47", name:	"防御+2", cost:	3 },
+    { hex: "48", name:	"防御+2", cost:	4 },
   ],
   "13": [
     { hex: "45", name: "防御+1", cost: 1 },
@@ -223,5 +241,8 @@ k_skill_add = {
     { hex: "8B", name: "スロット+1", cost: 6 },
     { hex: "8C", name: "スロット+2", cost: 12 },
     { hex: "8D", name: "スロット+3", cost: 18 },
+    { hex: "46", name:	"防御+1", cost:	2 },
+    { hex: "47", name:	"防御+2", cost:	3 },
+    { hex: "48", name:	"防御+2", cost:	4 },
   ],
 };
