@@ -11,6 +11,34 @@ var k_result = {
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
     ]};
+
+var k_slot = {
+    slotLv1: 0,
+    slotLv2: 0,
+    slotLv3: 0,
+    slotLv4: 0,
+}
+
+var k_slot_simple = [0, 0, 0];
+var k_slot_simple_oringal = [0, 0, 0];
+var k_slot_limit = 5; // slot add level limit to 5, cost 30
+
+var k_skill = {
+    sname: "", lv: 0,
+    sname: "", lv: 0,
+    sname: "", lv: 0,
+    sname: "", lv: 0,
+    sname: "", lv: 0,
+}
+
+var k_def = {
+    def_f:0,
+    def_w:0,
+    def_t:0,
+    def_i:0,
+    def_d:0,
+}
+
 armor_sel = document.getElementById("armor_select");
 for (i in armor_list) {
     var o = armor_list[i];
@@ -36,7 +64,36 @@ armor_sel.addEventListener("change", (event) => {
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
-    ]};
+        ]
+    };
+    
+    k_slot = {
+        slotLv1: 0,
+        slotLv2: 0,
+        slotLv3: 0,
+        slotLv4: 0,
+    }
+
+    k_slot_simple = [0, 0, 0];
+    k_slot_simple_oringal = [0, 0, 0];
+
+    k_skill = {
+        sname: "", lv: 0,
+        sname: "", lv: 0,
+        sname: "", lv: 0,
+        sname: "", lv: 0,
+        sname: "", lv: 0,
+    }
+    
+    k_def = {
+        def: 0,
+        def_max: 0,
+        def_f: 0,
+        def_w: 0,
+        def_t: 0,
+        def_i: 0,
+        def_d: 0,
+    }
 
     for (let i = 0; i < 7; i++) {
         document.getElementById(`armor_original_skill_${i}`).innerHTML = `<option value=\"00_${i}\">-----</option>`;
@@ -61,16 +118,24 @@ armor_sel.addEventListener("change", (event) => {
 
     let slot = "";
     for (let i = 4; i > 0; i--) {
+        k_slot[`slotLv${i}`] = o[`slotLv${i}`];
         let count = o[`slotLv${i}`];
         for (let j = 0; j < count; j++) {
             slot = slot + i;
         }
     }
+
+    for (let i = 0; i < slot.length; i++) {
+        k_slot_simple[i] = parseInt(slot.split("")[i]);
+        k_slot_simple_oringal[i] = parseInt(slot.split("")[i]);
+    }
+
     if (slot.length < 3) {
         for (let i = 0; i < 4 - slot.length; i++) {
             slot = slot + "-";
         }
     }
+
     div_armor_slot.textContent = `スロット：${slot}`;
     div_def_f.textContent = `火: ${o["def_f"]}`;
     div_def_w.textContent = `水: ${o["def_w"]}`;
@@ -157,8 +222,46 @@ armor_sel.addEventListener("change", (event) => {
                     let t_values = event.target.value.split("_");
                     k_result["k_skill"][t_values[1]]["k_skill_edit_hex"] = t_values[0];
                 });
-            } else {
+            } else if (["8B", "8C", "8D"].includes(k_skill_hex)) {
+                let v = 0;
+                switch (k_skill_hex) {
+                    case "8B":
+                        v = 1;
+                        break;
+                    case "8C":
+                        v = 2;
+                        break;
+                    case "8D":
+                        v = 3;
+                        break;
+                    default:
+                        v = 0;
+                }
+                if (v > 0) {
+                    for (let i = 0; i < 3; i++) {
+                        if (k_slot_simple[i] == 0) {
+                            k_slot_simple[i] = 1;
+                            v--;
+                        }
+                    }
+                    for (let i = 0; i < 3; i++) {
+                        if (v > 0 && k_slot_simple[i] < 4) {
+                            let tmp = k_slot_simple[i];
+                            if ((tmp + v) > 4) {
+                                k_slot_simple[i] = 4;
+                                v = tmp + v - 4;
+                            } else {
+                                k_slot_simple[i] = tmp + v;
+                                v = 0;
+                            }
+                        }
+                    }
+                }
+                console.log(k_slot_simple);
+            }            
+            else {
                 k_result["k_skill"][i]["k_skill_edit_hex"] = "00";
+                k_slot_simple = k_slot_simple_oringal;
             }
         });
     }
@@ -196,4 +299,47 @@ function copyToClipboard() {
     let content = document.getElementById("template_result").innerText;
     navigator.clipboard.writeText(content);
     document.getElementById("copy_result").innerText = "copied!";
+}
+
+function k_slot_add(v) {
+    let count = 0;
+    for (let i in k_slot) {
+        count += k_slot[i];
+    }
+
+    if (count < 3 && k_slot["slotLv1"] < 3) {
+        
+    }
+    while (v > 0) {
+        for (i in k_slot) {
+            
+        }
+        if (k_slot["slotLv1"] < 3) {
+            k_slot["slotLv1"] += 1;
+        }
+        v--;
+    }
+}
+
+function k_slot_simple_add(v) {
+    if (v == 0) return;
+    for (let i = 0; i < 3; i++) {
+        if (k_slot_simple[i] == 0) {
+            k_slot_simple[i] = 1;
+            v--;
+        }
+    }
+    for (let i = 0; i < 3; i++) {
+        if (v > 0 && k_slot_simple[i] < 4) {
+            let tmp = k_slot_simple[i];
+            if ((tmp + v) > 4) {
+                k_slot_simple[i] = 4;
+                v = tmp + v - 4;
+            } else {
+                k_slot_simple[i] = tmp + v;
+                v = 0;
+            }
+        }
+    }
+
 }
