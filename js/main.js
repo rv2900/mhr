@@ -187,6 +187,7 @@ armor_sel.addEventListener("change", (event) => {
             let sum = k_skills_cost_list.reduce((partialSum, a) => partialSum + a, 0);
             div_armor_cost.textContent = `Armor Cost: ${armor_cost - sum}`;
             
+            // todo: add function to walk through k_skill_0 ~ 6 to see whether add slot skill existed.
             // delete skill hex 0x95
             if (k_skill_hex == "95") {
                 sel_armor_original_skill = document.getElementById(`armor_original_skill_${i}`);
@@ -223,45 +224,12 @@ armor_sel.addEventListener("change", (event) => {
                     k_result["k_skill"][t_values[1]]["k_skill_edit_hex"] = t_values[0];
                 });
             } else if (["8B", "8C", "8D"].includes(k_skill_hex)) {
-                let v = 0;
-                switch (k_skill_hex) {
-                    case "8B":
-                        v = 1;
-                        break;
-                    case "8C":
-                        v = 2;
-                        break;
-                    case "8D":
-                        v = 3;
-                        break;
-                    default:
-                        v = 0;
-                }
-                if (v > 0) {
-                    for (let i = 0; i < 3; i++) {
-                        if (k_slot_simple[i] == 0) {
-                            k_slot_simple[i] = 1;
-                            v--;
-                        }
-                    }
-                    for (let i = 0; i < 3; i++) {
-                        if (v > 0 && k_slot_simple[i] < 4) {
-                            let tmp = k_slot_simple[i];
-                            if ((tmp + v) > 4) {
-                                k_slot_simple[i] = 4;
-                                v = tmp + v - 4;
-                            } else {
-                                k_slot_simple[i] = tmp + v;
-                                v = 0;
-                            }
-                        }
-                    }
-                }
-                console.log(k_slot_simple);
+                k_slot_simple_add(k_skill_hex, i);
             }            
             else {
                 k_result["k_skill"][i]["k_skill_edit_hex"] = "00";
-                k_slot_simple = k_slot_simple_oringal;
+                k_slot_simple = JSON.parse(JSON.stringify(k_slot_simple_oringal));
+                console.log(k_slot_simple);
             }
         });
     }
@@ -292,7 +260,7 @@ function genTemplate() {
 680F0000 00000000 000000${k_skill_edit_hex}`;
         template += template_block;
     }
-    document.getElementById("template_result").innerText = template_title + template;
+    document.getElementById("template_result").innerText = template_title + template + "\n";
 }
 
 function copyToClipboard() {
@@ -321,25 +289,66 @@ function k_slot_add(v) {
     }
 }
 
-function k_slot_simple_add(v) {
-    if (v == 0) return;
-    for (let i = 0; i < 3; i++) {
-        if (k_slot_simple[i] == 0) {
-            k_slot_simple[i] = 1;
-            v--;
-        }
+function k_slot_simple_add(k_skill_hex, idx) {
+    let k_slot_simple = JSON.parse(JSON.stringify(k_slot_simple_oringal));
+    console.log(k_slot_simple_oringal);
+    let v = 0;
+    switch (k_skill_hex) {
+        case "8B":
+            v = 1;
+            break;
+        case "8C":
+            v = 2;
+            break;
+        case "8D":
+            v = 3;
+            break;
+        default:
+            v = 0;
     }
-    for (let i = 0; i < 3; i++) {
-        if (v > 0 && k_slot_simple[i] < 4) {
-            let tmp = k_slot_simple[i];
-            if ((tmp + v) > 4) {
-                k_slot_simple[i] = 4;
-                v = tmp + v - 4;
-            } else {
-                k_slot_simple[i] = tmp + v;
-                v = 0;
+    console.log(v);
+
+    // check other k_skill item whether slot add skill
+    for (let i = 0; i < 7; i++){
+        if (i != idx) {
+            let slot_add_value = document.getElementById(`k_skill_${i}`).value.split("_")[0];
+            switch (slot_add_value) {
+                case "8B":
+                    v += 1;
+                    break;
+                case "8C":
+                    v += 2;
+                    break;
+                case "8D":
+                    v += 3;
+                    break;
+                default:
+                    v += 0;
             }
         }
     }
 
+    console.log(v);
+
+    if (v > 0) {
+        for (let i = 0; i < 3; i++) {
+            if (v > 0 && k_slot_simple[i] == 0) {
+                k_slot_simple[i] = 1;
+                v--;
+            }
+        }
+        for (let i = 0; i < 3; i++) {
+            if (v > 0 && k_slot_simple[i] < 4) {
+                let tmp = k_slot_simple[i];
+                if ((tmp + v) > 4) {
+                    k_slot_simple[i] = 4;
+                    v = tmp + v - 4;
+                } else {
+                    k_slot_simple[i] = tmp + v;
+                    v = 0;
+                }
+            }
+        }
+    }
+    console.log(k_slot_simple);
 }
