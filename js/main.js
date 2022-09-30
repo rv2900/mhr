@@ -1,8 +1,26 @@
 var k_result = {
     eq_name: "",
-    eq_pos: 0, 
-    eq_pos_hex: "00", 
+    eq_pos: 0,
+    eq_pos_hex: "00",
+    eq_slot: "000",
+    eq_k_slot: "000",
     k_skill: [
+        { k_skill_hex: "00", k_skill_edit_hex: "00" },
+        { k_skill_hex: "00", k_skill_edit_hex: "00" },
+        { k_skill_hex: "00", k_skill_edit_hex: "00" },
+        { k_skill_hex: "00", k_skill_edit_hex: "00" },
+        { k_skill_hex: "00", k_skill_edit_hex: "00" },
+        { k_skill_hex: "00", k_skill_edit_hex: "00" },
+        { k_skill_hex: "00", k_skill_edit_hex: "00" },
+    ]};
+
+var k_origin = {
+    eq_name: "",
+    eq_pos: 0, 
+    eq_pos_hex: "00",
+    eq_slot: "000",
+    eq_k_slot: "000",
+    skill: [
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
@@ -22,14 +40,6 @@ var k_slot = {
 var k_slot_simple = [0, 0, 0];
 var k_slot_simple_oringal = [0, 0, 0];
 var k_slot_limit = 5; // slot add level limit to 5, cost 30
-
-var k_skill = {
-    sname: "", lv: 0,
-    sname: "", lv: 0,
-    sname: "", lv: 0,
-    sname: "", lv: 0,
-    sname: "", lv: 0,
-}
 
 var k_def = {
     def_f:0,
@@ -56,6 +66,8 @@ armor_sel.addEventListener("change", (event) => {
     eq_name: "",
     eq_pos: 0, 
     eq_pos_hex: "00", 
+    eq_slot: "000",
+    eq_k_slot: "000",
     k_skill: [
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
         { k_skill_hex: "00", k_skill_edit_hex: "00" },
@@ -76,14 +88,6 @@ armor_sel.addEventListener("change", (event) => {
 
     k_slot_simple = [0, 0, 0];
     k_slot_simple_oringal = [0, 0, 0];
-
-    k_skill = {
-        sname: "", lv: 0,
-        sname: "", lv: 0,
-        sname: "", lv: 0,
-        sname: "", lv: 0,
-        sname: "", lv: 0,
-    }
     
     k_def = {
         def: 0,
@@ -132,7 +136,7 @@ armor_sel.addEventListener("change", (event) => {
 
     if (slot.length < 3) {
         for (let i = 0; i < 4 - slot.length; i++) {
-            slot = slot + "-";
+            slot = slot + "0";
         }
     }
 
@@ -225,11 +229,13 @@ armor_sel.addEventListener("change", (event) => {
                 });
             } else if (["8B", "8C", "8D"].includes(k_skill_hex)) {
                 k_slot_simple_add(k_skill_hex, i);
+                let result_slot = k_slot_simple.join("");
+                div_armor_slot.innerText = `スロット：${k_slot_simple_oringal.join("")} >> ${result_slot}`;
             }            
             else {
                 k_result["k_skill"][i]["k_skill_edit_hex"] = "00";
                 k_slot_simple = JSON.parse(JSON.stringify(k_slot_simple_oringal));
-                console.log(k_slot_simple);
+                div_armor_slot.innerText = `スロット：${k_slot_simple_oringal.join("")}`;
             }
         });
     }
@@ -247,7 +253,7 @@ function genTemplate() {
         k_skill_hex = k_result["k_skill"][index]["k_skill_hex"];
         k_skill_edit_hex = k_result["k_skill"][index]["k_skill_edit_hex"];
         let template_block =`
-580F0000 11A55660
+580F0000 11D90A20
 580F1000 00000088
 580F1000 00000028
 580F1000 00000010
@@ -269,29 +275,8 @@ function copyToClipboard() {
     document.getElementById("copy_result").innerText = "copied!";
 }
 
-function k_slot_add(v) {
-    let count = 0;
-    for (let i in k_slot) {
-        count += k_slot[i];
-    }
-
-    if (count < 3 && k_slot["slotLv1"] < 3) {
-        
-    }
-    while (v > 0) {
-        for (i in k_slot) {
-            
-        }
-        if (k_slot["slotLv1"] < 3) {
-            k_slot["slotLv1"] += 1;
-        }
-        v--;
-    }
-}
-
 function k_slot_simple_add(k_skill_hex, idx) {
-    let k_slot_simple = JSON.parse(JSON.stringify(k_slot_simple_oringal));
-    console.log(k_slot_simple_oringal);
+    k_slot_simple = JSON.parse(JSON.stringify(k_slot_simple_oringal));
     let v = 0;
     switch (k_skill_hex) {
         case "8B":
@@ -306,12 +291,10 @@ function k_slot_simple_add(k_skill_hex, idx) {
         default:
             v = 0;
     }
-    console.log(v);
-
     // check other k_skill item whether slot add skill
     for (let i = 0; i < 7; i++){
         if (i != idx) {
-            let slot_add_value = document.getElementById(`k_skill_${i}`).value.split("_")[0];
+            let slot_add_value = k_result["k_skill"][i]["k_skill_hex"];
             switch (slot_add_value) {
                 case "8B":
                     v += 1;
@@ -327,8 +310,6 @@ function k_slot_simple_add(k_skill_hex, idx) {
             }
         }
     }
-
-    console.log(v);
 
     if (v > 0) {
         for (let i = 0; i < 3; i++) {
@@ -350,5 +331,4 @@ function k_slot_simple_add(k_skill_hex, idx) {
             }
         }
     }
-    console.log(k_slot_simple);
 }
