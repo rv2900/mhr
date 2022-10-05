@@ -59,6 +59,19 @@ for (i in armor_list) {
         armor_sel.appendChild(opt);
     }
 }
+
+// fill armor position <select>
+armor_pos = document.getElementById("armor_pos");
+for (let i = 0; i < 10; i++) {
+    let eq_pos_hex = 32;
+    eq_pos_hex = eq_pos_hex + i * 8;
+    let opt = document.createElement("option");
+    eq_pos = i + 1;
+    opt.value = `${eq_pos_hex.toString(16)}_${eq_pos}`;
+    opt.text = `${eq_pos}`;
+    armor_pos.appendChild(opt);
+}
+
 armor_sel.addEventListener("change", (event) => {
     // reset all
 

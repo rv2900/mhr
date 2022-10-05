@@ -4,12 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>モンスターハンターライズ・サンブレイク　傀異錬成チートコード</title>
-    <meta name="description" content="">
+    <title>モンスターハンターライズ・サンブレイク　傀異錬成ジェネレーター</title>
+    <meta name="description" content="モンスターハンターライズ・サンブレイク MHRSB 傀異錬成ジェネレーター v12.0.0">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/MHR_Armor_forsim.js"></script>
+    <script src="js/armor_list.js"></script>
     <script src="js/armor_pool_cost.js"></script>
     <script src="js/skill_hex_cost.js"></script>
     <script src="js/cost_skill_hex.js"></script>
@@ -18,21 +18,19 @@
 
 <body>
     <div class="container mt-2">
-        <h2>傀異錬成チートコード v12.0.0</h2>
+        <h2>傀異錬成ジェネレーター v12.0.0</h2>
         <form>
-            <label class="form-label">装備を選んでください：</label>
-            <select class="form-select-sm" id="armor_select" name="armor_select">
-                <option value="">-----</option>
-            </select>
-            <br>
-            <label class="form-label">装備ボックス位置　　：</label>
-            <select class="form-select-sm" id="armor_pos" name="armor_pos">
-                <option value="20_1">1</option>
-                <option value="28_2">2</option>
-                <option value="30_3">3</option>
-                <option value="38_4">4</option>
-                <option value="40_5">5</option>
-            </select>
+            <div class="m-1 row">
+                <label class="form-label col-sm-auto">装備を選んでください：</label>
+                <select class="form-select col" id="armor_select" name="armor_select">
+                    <option value="">-----</option>
+                </select>
+            </div>
+            <div class="m-1 row">
+                <label class="form-label col-sm-auto">装備ボックス位置　　：</label>
+                <select class="form-select col" id="armor_pos" name="armor_pos">
+                </select>
+            </div>
             <div id="result">
                 <div class="alert alert-success" id="armor_slot">スロット: </div>
                 <div class="row p-2">
@@ -63,7 +61,6 @@
                             <tr><td><select class="form-select" id="k_skill_5"><option value="00_0_5">-----</option></select></td><td><select class="form-select" id="armor_original_skill_5"><option value="00_5">-----</option></select></td><td><select class="form-select" id="armor_new_skill_5"><option value="00_5">-----</option></select></td></tr>
                             <tr><td><select class="form-select" id="k_skill_6"><option value="00_0_6">-----</option></select></td><td><select class="form-select" id="armor_original_skill_6"><option value="00_6">-----</option></select></td><td><select class="form-select" id="armor_new_skill_6"><option value="00_6">-----</option></select></td></tr>
                     </tbody>
-                    
                 </table>
             </div>
             <button class="btn btn-primary" type="button" id="gen_template" onclick="genTemplate()">Gen Template</button>
