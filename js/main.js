@@ -1,4 +1,5 @@
 var k_result = {
+    eq_id: "",
     eq_name: "",
     eq_pos: 0,
     eq_pos_hex: "00",
@@ -15,6 +16,7 @@ var k_result = {
     ]};
 
 var k_origin = {
+    eq_id: "",
     eq_name: "",
     eq_pos: 0, 
     eq_pos_hex: "00",
@@ -49,6 +51,37 @@ var k_def = {
     def_d:0,
 }
 
+window.onload = init;
+
+function init() {
+    let armor_sel = document.getElementById("armor_select");
+    let armor_id = armor_sel.value;
+    let armor_data = armor_list[armor_id];
+
+    k_origin["eq_id"] = armor_id;
+    k_origin["eq_name"] = armor_data["name"];
+
+    let eq_position = document.getElementById("armor_pos").value.split("_");
+    k_origin["eq_pos"] = eq_position[1];
+    k_origin["eq_pos_hex"] = eq_position[0];
+
+    let slot = "";
+    for (let i = 4; i > 0; i--) {
+        let count = armor_data[`slotLv${i}`];
+        for (let j = 0; j < count; j++) {
+            slot = slot + i;
+        }
+    }
+    if (slot.length < 3) {
+        for (let i = 0; i < 4 - slot.length; i++) {
+            slot = slot + "0";
+        }
+    }
+    k_origin["eq_slot"] = slot;
+
+}
+
+// fill armor list <select>
 armor_sel = document.getElementById("armor_select");
 for (i in armor_list) {
     var o = armor_list[i];
@@ -71,6 +104,11 @@ for (let i = 0; i < 10; i++) {
     opt.text = `${eq_pos}`;
     armor_pos.appendChild(opt);
 }
+armor_pos.addEventListener("change", (event) => { 
+    let eq_position = event.target.value.split("_");
+    k_origin["eq_pos"] = eq_position[1];
+    k_origin["eq_pos_hex"] = eq_position[0];
+});
 
 armor_sel.addEventListener("change", (event) => {
     // reset all
