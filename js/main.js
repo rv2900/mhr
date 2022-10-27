@@ -165,7 +165,7 @@ function genTemplate() {
         k_skill_hex = k_result["k_skill"][index]["k_skill_hex"];
         k_skill_edit_hex = k_result["k_skill"][index]["k_skill_edit_hex"];
         let template_block =`
-580F0000 11D90A20
+580F0000 11D95B00
 580F1000 00000088
 580F1000 00000028
 580F1000 00000010
