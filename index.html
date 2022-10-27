@@ -23,6 +23,7 @@
             <div class="m-1 row">
                 <label class="form-label col-sm-auto">装備を選んでください：</label>
                 <select class="form-select col" id="armor_select" name="armor_select">
+                    <option>-----</option>
                 </select>
             </div>
             <div class="m-1 row">
@@ -31,8 +32,11 @@
                 </select>
             </div>
             <div id="result">
-                <div class="alert alert-success" id="armor_slot">スロット: </div>
-                <div class="row p-2">
+                <div class="m-1 row">
+                    <div class="col-sm-auto">スロット：</div>
+                    <div class="col alert alert-success" id="armor_slot"></div>
+                </div>
+                <div class="m-1 row">
                     <div class="col list-group-item-danger rounded" id="def_f">火: </div>
                     <div class="col list-group-item-primary rounded" id="def_w">水: </div>
                     <div class="col list-group-item-warning rounded" id="def_t">雷: </div>
