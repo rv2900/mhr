@@ -83,8 +83,6 @@ armor_sel.addEventListener("change", (event) => {
     pool_id = armor_pool_cost[`${armor_data["id"]}`]["pool"];
     k_skills = k_skill_add[pool_id.toString()];
 
-    let sum_cost = 0;
-
     for (let i = 0; i < 7; i++) {
         let k_skill_sel = document.getElementById(`k_skill_${i}`);
         k_skill_sel.innerHTML = `<option value="00_0">-----</option>`;
@@ -107,8 +105,7 @@ armor_sel.addEventListener("change", (event) => {
             k_result["k_skill"][i]["k_skill_edit_hex"] = "00";
             k_result["k_skill"][i]["k_skill_cost"] = k_skill_cost;
 
-            sum_cost += k_result["k_skill"][i]["k_skill_cost"];
-            render_armor_cost(k_result["eq_cost"] - sum_cost);
+            render_armor_cost();
 
             let k_slot_simple = k_slot_simple_add(k_skill_hex, i);
             k_result["eq_k_slot"] = k_slot_simple.join("");
@@ -149,7 +146,7 @@ armor_sel.addEventListener("change", (event) => {
                     k_result["k_skill"][i]["k_skill_edit_hex"] = event.target.value;;
                 });
             }
-
+            console.log(k_result["k_skill"]);
         });
     }
 });
@@ -215,14 +212,15 @@ function init(armor_id, armor_data) {
     k_origin["eq_slot"] = slot;
     k_origin["eq_k_slot"] = slot;
 
-    render_armor_slot(slot);
-    render_armor_def(armor_data);
-    render_armor_skill(armor_data["skill"]);
     let armor_cost = armor_pool_cost[armor_data["id"]]["cost"];
-    render_armor_cost(armor_cost);
     k_origin["eq_cost"] = armor_cost;
 
     k_result = JSON.parse(JSON.stringify(k_origin));
+
+    render_armor_slot(slot);
+    render_armor_def(armor_data);
+    render_armor_skill(armor_data["skill"]);
+    render_armor_cost();
 
     for (let i = 0; i < 7; i++) {
         document.getElementById(`armor_original_skill_${i}`).innerHTML = `<option value=\"00_${i}\">-----</option>`;
@@ -323,6 +321,10 @@ function render_armor_slot(slot) {
     document.getElementById("armor_slot").innerText = slot;
 }
 
-function render_armor_cost(cost) {
-    document.getElementById("armor_cost").textContent = `Armor Cost: ${cost}`;
+function render_armor_cost() {
+    let armor_cost = k_result["eq_cost"];
+    for (let i = 0; i < 7; i++) {
+        armor_cost -= k_result["k_skill"][i]["k_skill_cost"];
+    }
+    document.getElementById("armor_cost").textContent = `Armor Cost: ${armor_cost}`;
 }
