@@ -1,20 +1,4 @@
-var k_result = {
-    eq_id: "",
-    eq_name: "",
-    eq_pos: 0,
-    eq_pos_hex: "00",
-    eq_slot: "000",
-    eq_k_slot: "000",
-    eq_cost: 0,
-    k_skill: [
-        { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
-        { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
-        { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
-        { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
-        { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
-        { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
-        { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
-    ]};
+var k_result = {};
 
 var k_origin = {
     eq_id: "",
@@ -34,7 +18,8 @@ var k_origin = {
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_cost:0 },
     ]};
 
-var k_slot_limit = 5; // slot add level limit to 5, cost 30
+// slot add level limit to 5, cost 30
+var k_slot_limit = 5; 
 
 // TODO: render k_def?
 var k_def = {
@@ -161,8 +146,9 @@ function genTemplate() {
         index = i / 8 - 4;
         k_skill_hex = k_result["k_skill"][index]["k_skill_hex"];
         k_skill_edit_hex = k_result["k_skill"][index]["k_skill_edit_hex"];
+        version_code = "11D95B00";   // version update code
         let template_block =`
-580F0000 11D90A20
+580F0000 ${version_code}
 580F1000 00000088
 580F1000 00000028
 580F1000 00000010
