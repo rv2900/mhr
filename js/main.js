@@ -146,7 +146,7 @@ function genTemplate() {
         index = i / 8 - 4;
         k_skill_hex = k_result["k_skill"][index]["k_skill_hex"];
         k_skill_edit_hex = k_result["k_skill"][index]["k_skill_edit_hex"];
-        version_code = "11D95B00";   // version update code
+        version_code = "129E11D8";   // version update code
         let template_block =`
 580F0000 ${version_code}
 580F1000 00000088
