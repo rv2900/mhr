@@ -45,6 +45,8 @@ armor_pos.addEventListener("change", (event) => {
     let eq_position = event.target.value.split("_");
     k_origin["eq_pos"] = eq_position[1];
     k_origin["eq_pos_hex"] = eq_position[0];
+    k_result["eq_pos"] = eq_position[1];
+    k_result["eq_pos_hex"] = eq_position[0];
 });
 
 // fill armor list <select>
