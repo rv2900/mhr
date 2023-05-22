@@ -80,7 +80,7 @@ for (i in talisman_skill) {
 }
 s1_sel.addEventListener("change", (event) => {
     let skill_id = event.target.value;
-    talisman["s1"]["hex"] = parseInt(skill_id).toString(16).padStart(2, "0");
+    talisman["s1"]["hex"] = parseInt(skill_id).toString(16).toUpperCase().padStart(2, "0");
     
     s1_sel_new = document.getElementById("skill_1_lv");
     s1_sel_new.innerHTML = `<option value="0">-----</option>`;
@@ -112,7 +112,7 @@ for (i in talisman_skill) {
 }
 s2_sel.addEventListener("change", (event) => { 
     let skill_id = event.target.value;
-    talisman["s2"]["hex"] = parseInt(skill_id).toString(16).padStart(2, "0");
+    talisman["s2"]["hex"] = parseInt(skill_id).toString(16).toUpperCase().padStart(2, "0");
     s2_sel_new = document.getElementById("skill_2_lv");
     s2_sel_new.innerHTML = `<option value="0">-----</option>`;
 
