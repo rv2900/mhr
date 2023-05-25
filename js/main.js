@@ -20,6 +20,9 @@ var k_origin = {
     def_t: 0,
     def_i: 0,
     def_d: 0,
+    eq_origin_skill: {
+    // "skill name": origin level,
+    },
     eq_skill: {
     // "skill name": level,
     },
@@ -127,6 +130,8 @@ armor_sel.addEventListener("change", (event) => {
                     k_result["k_skill"][i]["k_skill_name"] = skill_name;
                     k_result["k_skill"][i]["k_skill_name_value"] = -1;
                     k_result["eq_skill"][skill_name] += -1;
+                    
+                    render_armor_skill();
                 });
             // skill add hex: 0x90 to 0x94
             } else if (["90", "91", "92", "93", "94"].includes(k_skill_hex)) {
@@ -153,6 +158,8 @@ armor_sel.addEventListener("change", (event) => {
                         k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                         k_result["k_skill"][i]["k_skill_name"] = skill_name;
                         k_result["k_skill"][i]["k_skill_name_value"] = 1;
+
+                        render_armor_skill();
                     } else {
                         alert("スキルは5個までです！");
                         sel_armor_new_skill.options[0].selected = true;
@@ -223,6 +230,7 @@ function init(armor_id, armor_data) {
     k_origin["eq_name"] = armor_data["name"];
     for (let i = 0; i < armor_data["skill"].length; i++) {
         k_origin["eq_skill"][armor_data["skill"][i]["sname"]] = 0;
+        k_origin["eq_origin_skill"][armor_data["skill"][i]["sname"]] = armor_data["skill"][i]["lv"];
     }
     k_origin["eq_skill_available"] = ARMOR_SKILL_LIMIT - Object.keys(k_origin["eq_skill"]).length;
 
@@ -317,13 +325,12 @@ function k_slot_simple_add(k_skill_hex, idx) {
     return k_slot_simple;
 }
 
-function render_armor_skill(skills_array) {
+function render_armor_skill() {
     var div_armor_skill = document.getElementById("armor_skill");
     div_armor_skill.innerHTML = "";
-    for (let i in skills_array) {
-        let sname = skills_array[i]["sname"];
-        let lv = skills_array[i]["lv"];
-        let skill = `${sname}：Lv${lv}`;
+    for ([k, v] of Object.entries(k_result["eq_skill"])) {
+        let lv = k_result["eq_skill"][k] + (k_result["eq_origin_skill"][k] || 0);
+        let skill = `${k}：Lv${lv}`;
         let skill_node = document.createElement("li");
         skill_node.className = "list-group-item";
         skill_node.textContent = skill;
