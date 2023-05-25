@@ -14,6 +14,7 @@
     <script src="js/skill_hex_cost.js"></script>
     <script src="js/cost_skill_hex.js"></script>
     <script src="js/k_skill_add.js"></script>
+    <script src="js/k_skill_def_map.js"></script>
 </head>
 
 <body>
@@ -40,6 +41,7 @@
                     <div class="col alert alert-success" id="armor_slot"></div>
                 </div>
                 <div class="m-1 row">
+                    <div class="col list-group-item-success rounded" id="def">防御: </div>
                     <div class="col list-group-item-danger rounded" id="def_f">火: </div>
                     <div class="col list-group-item-primary rounded" id="def_w">水: </div>
                     <div class="col list-group-item-warning rounded" id="def_t">雷: </div>
@@ -50,6 +52,8 @@
                 <ul class="list-group p-1" id="armor_skill"></ul>
                 <div class="alert alert-danger" id="armor_cost">Armor Cost: </div>
                 <label class="form-label">錬成順番：防御- 防御+ 耐性- 耐性+ スロット+ スキル- スキル+</label>
+                <br>
+                <label class="form-label">スキル5個まで限定（元スキル含め）</label>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -70,6 +74,7 @@
                 </table>
             </div>
             <button class="btn btn-primary" type="button" id="gen_template" onclick="genTemplate()">Gen Template</button>
+            <button class="btn btn-primary" type="button" id="gen_export" onclick="genExport()">Export</button>
             <button class="btn btn-outline-secondary" type="button" id="copy_to_clipboard" onclick="copyToClipboard()">Copy</button>
             <label class="text-success" id="copy_result"></label>
         </form>
