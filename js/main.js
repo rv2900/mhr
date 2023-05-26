@@ -228,6 +228,8 @@ function slot_simplify(armor_data) {
 function init(armor_id, armor_data) {
     k_origin["eq_id"] = armor_id;
     k_origin["eq_name"] = armor_data["name"];
+    k_origin["eq_skill"] = {};
+    k_origin["eq_origin_skill"] = {};
     for (let i = 0; i < armor_data["skill"].length; i++) {
         k_origin["eq_skill"][armor_data["skill"][i]["sname"]] = 0;
         k_origin["eq_origin_skill"][armor_data["skill"][i]["sname"]] = armor_data["skill"][i]["lv"];
@@ -255,7 +257,7 @@ function init(armor_id, armor_data) {
 
     render_armor_slot(slot);
     render_armor_def();
-    render_armor_skill(armor_data["skill"]);
+    render_armor_skill();
     render_armor_cost();
 
     for (let i = 0; i < 7; i++) {
@@ -327,10 +329,10 @@ function k_slot_simple_add(k_skill_hex, idx) {
 
 function render_armor_skill() {
     var div_armor_skill = document.getElementById("armor_skill");
-    div_armor_skill.innerHTML = "";
+    div_armor_skill.replaceChildren();
     for ([k, v] of Object.entries(k_result["eq_skill"])) {
         let lv = k_result["eq_skill"][k] + (k_result["eq_origin_skill"][k] || 0);
-        let skill = `${k}：Lv${lv}`;
+        let skill = `${k}+${lv}`;
         let skill_node = document.createElement("li");
         skill_node.className = "list-group-item";
         skill_node.textContent = skill;
