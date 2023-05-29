@@ -123,13 +123,32 @@ armor_sel.addEventListener("change", (event) => {
                     opt.value = `${skill_hex}`;
                     sel_armor_original_skill.appendChild(opt);
                 }
+                
+                if (sel_armor_original_skill.children.length > 1) {
+                    sel_armor_original_skill.children[1].selected = true;
+                    k_result["k_skill"][i]["k_skill_edit_hex"] = document.querySelector(`#armor_original_skill_${i} option:checked`).value;
+                    k_result["k_skill"][i]["k_skill_name"] = document.querySelector(`#armor_original_skill_${i} option:checked`).text.split("+")[0];
+                    k_result["k_skill"][i]["k_skill_name_value"] = -1;
+                }
+
+
                 sel_armor_original_skill.addEventListener("change", (event) => {
                     let skill_edit_hex = event.target.value
-                    let skill_name = sel_armor_original_skill.options[sel_armor_original_skill.selectedIndex].text.split("+")[0];
+                    // let skill_name = sel_armor_original_skill.options[sel_armor_original_skill.selectedIndex].text.split("+")[0];
+                    let skill_name = document.querySelector(`#armor_original_skill_${i} option:checked`).text.split("+")[0];
+
+                    if (skill_edit_hex == "00") {
+                        k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
+                        k_result["k_skill"][i]["k_skill_name"] = "";
+                        k_result["k_skill"][i]["k_skill_name_value"] = 0;
+                        return;
+                    }
+
                     k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                     k_result["k_skill"][i]["k_skill_name"] = skill_name;
                     k_result["k_skill"][i]["k_skill_name_value"] = -1;
-                    k_result["eq_skill"][skill_name] += -1;
+                    k_result["eq_skill"][skill_name] += -1; // TODO: bugs here, should walk througt k_skill[0]~[6]
+                    console.log(`skill delete: ${k_result["eq_skill"][skill_name]}`);
                     
                     render_armor_skill();
                 });
@@ -149,12 +168,19 @@ armor_sel.addEventListener("change", (event) => {
                 sel_armor_new_skill.addEventListener("change", (event) => {
                     let skill_edit_hex = event.target.value
                     let skill_name = sel_armor_new_skill.options[sel_armor_new_skill.selectedIndex].text;
+                    if (skill_edit_hex == "00") {
+                        k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
+                        k_result["k_skill"][i]["k_skill_name"] = "";
+                        k_result["k_skill"][i]["k_skill_name_value"] = 0;
+                        return;
+                    }
                     if (Object.keys(k_result["eq_skill"]).length < ARMOR_SKILL_LIMIT) {
                         if (Object.keys(k_result["eq_skill"]).includes(skill_name)) {
-                            k_result["eq_skill"][skill_name] += 1;
+                            k_result["eq_skill"][skill_name] += 1; // TODO: bugs here, should walk througt k_skill[0]~[6]
                         } else {
                             k_result["eq_skill"][skill_name] = 1;
                         }
+                        console.log(`skill add: ${k_result["eq_skill"][skill_name]}`);
                         k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                         k_result["k_skill"][i]["k_skill_name"] = skill_name;
                         k_result["k_skill"][i]["k_skill_name_value"] = 1;
