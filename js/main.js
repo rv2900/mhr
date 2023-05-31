@@ -3,9 +3,9 @@ const ARMOR_SKILL_LIMIT = 5;
 
 const DEF_MAP = Object.keys(k_skill_def_map);
 
-var k_result = {};
+const SKILL_ADD_HEX = ["90", "91", "92", "93", "94"];
 
-var k_origin = {
+var k_result = {
     eq_id: "",
     eq_name: "",
     eq_pos: 0,
@@ -14,19 +14,23 @@ var k_origin = {
     eq_k_slot: "000",
     eq_cost: 0,
     eq_pool_id: 0,
-    def: 0,
-    def_f: 0,
-    def_w: 0,
-    def_t: 0,
-    def_i: 0,
-    def_d: 0,
+    def  : { origin: 0, delta: 0 },
+    def_f: { origin: 0, delta: 0 },
+    def_w: { origin: 0, delta: 0 },
+    def_t: { origin: 0, delta: 0 },
+    def_i: { origin: 0, delta: 0 },
+    def_d: { origin: 0, delta: 0 },
     eq_origin_skill: {
     // "skill name": origin level,
     },
-    eq_skill: {
-    // "skill name": level,
-    },
-    eq_skill_available: ARMOR_SKILL_LIMIT,
+    eq_skill: [
+        { sname: "", lv: { origin: 0, delta: 0 } },
+        { sname: "", lv: { origin: 0, delta: 0 } },
+        { sname: "", lv: { origin: 0, delta: 0 } },
+        { sname: "", lv: { origin: 0, delta: 0 } },
+        { sname: "", lv: { origin: 0, delta: 0 } },
+    ],
+    eq_skill_available: 0,
     k_skill: [
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
@@ -36,8 +40,6 @@ var k_origin = {
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
     ]};
-
-
 
 // fill armor position <select>
 armor_pos = document.getElementById("armor_pos");
@@ -52,8 +54,6 @@ for (let i = 0; i < 10; i++) {
 }
 armor_pos.addEventListener("change", (event) => { 
     let eq_position = event.target.value.split("_");
-    k_origin["eq_pos"] = eq_position[1];
-    k_origin["eq_pos_hex"] = eq_position[0];
     k_result["eq_pos"] = eq_position[1];
     k_result["eq_pos_hex"] = eq_position[0];
 });
@@ -73,13 +73,10 @@ armor_sel.addEventListener("change", (event) => {
     let armor_id = event.target.value;
     var armor_data = armor_list[armor_id];
 
-    // initial k_origin, k_result, render div
+    // initial k_result, render div
     init(armor_id, armor_data);
-    
-    pool_id = armor_pool_cost[`${armor_data["id"]}`]["pool"];
-    k_origin["eq_pool_id"] = pool_id;
-    k_result["eq_pool_id"] = pool_id;
-    k_skills = k_skill_add[pool_id.toString()];
+
+    k_skills = k_skill_add[k_result["eq_pool_id"].toString()];
 
     for (let i = 0; i < 7; i++) {
         let k_skill_sel = document.getElementById(`k_skill_${i}`);
@@ -123,14 +120,6 @@ armor_sel.addEventListener("change", (event) => {
                     opt.value = `${skill_hex}`;
                     sel_armor_original_skill.appendChild(opt);
                 }
-                
-                if (sel_armor_original_skill.children.length > 1) {
-                    sel_armor_original_skill.children[1].selected = true;
-                    k_result["k_skill"][i]["k_skill_edit_hex"] = document.querySelector(`#armor_original_skill_${i} option:checked`).value;
-                    k_result["k_skill"][i]["k_skill_name"] = document.querySelector(`#armor_original_skill_${i} option:checked`).text.split("+")[0];
-                    k_result["k_skill"][i]["k_skill_name_value"] = -1;
-                }
-
 
                 sel_armor_original_skill.addEventListener("change", (event) => {
                     let skill_edit_hex = event.target.value
@@ -141,19 +130,20 @@ armor_sel.addEventListener("change", (event) => {
                         k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                         k_result["k_skill"][i]["k_skill_name"] = "";
                         k_result["k_skill"][i]["k_skill_name_value"] = 0;
+                        
+                        render_armor_skill();
                         return;
                     }
 
                     k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                     k_result["k_skill"][i]["k_skill_name"] = skill_name;
                     k_result["k_skill"][i]["k_skill_name_value"] = -1;
-                    k_result["eq_skill"][skill_name] += -1; // TODO: bugs here, should walk througt k_skill[0]~[6]
-                    console.log(`skill delete: ${k_result["eq_skill"][skill_name]}`);
-                    
+
                     render_armor_skill();
+
                 });
             // skill add hex: 0x90 to 0x94
-            } else if (["90", "91", "92", "93", "94"].includes(k_skill_hex)) {
+            } else if (SKILL_ADD_HEX.includes(k_skill_hex)) {
                 sel_armor_new_skill = document.getElementById(`armor_new_skill_${i}`);
                 sel_armor_new_skill.innerHTML = `<option value=\"00\">-----</option>`;
                 cost_skill_list = cost_skill_hex[t_values[1]];
@@ -172,30 +162,27 @@ armor_sel.addEventListener("change", (event) => {
                         k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                         k_result["k_skill"][i]["k_skill_name"] = "";
                         k_result["k_skill"][i]["k_skill_name_value"] = 0;
+                        render_armor_skill();
                         return;
                     }
-                    if (Object.keys(k_result["eq_skill"]).length < ARMOR_SKILL_LIMIT) {
-                        if (Object.keys(k_result["eq_skill"]).includes(skill_name)) {
-                            k_result["eq_skill"][skill_name] += 1; // TODO: bugs here, should walk througt k_skill[0]~[6]
-                        } else {
-                            k_result["eq_skill"][skill_name] = 1;
-                        }
-                        console.log(`skill add: ${k_result["eq_skill"][skill_name]}`);
-                        k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
-                        k_result["k_skill"][i]["k_skill_name"] = skill_name;
-                        k_result["k_skill"][i]["k_skill_name_value"] = 1;
-
-                        render_armor_skill();
-                    } else {
-                        alert("スキルは5個までです！");
-                        sel_armor_new_skill.options[0].selected = true;
+                    
+                    k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
+                    k_result["k_skill"][i]["k_skill_name"] = skill_name;
+                    k_result["k_skill"][i]["k_skill_name_value"] = 1;
+                    
+                    for (let i = 0; i < 7; i++){
+                        console.log(`${i}: ${k_result["k_skill"][i]["k_skill_name"]} ${k_result["k_skill"][i]["k_skill_name_value"]}`);
                     }
+        
+                    render_armor_skill();
                 });
             } else {
                 k_result["k_skill"][i]["k_skill_edit_hex"] = "00";
                 k_result["k_skill"][i]["k_skill_name"] = "";
                 k_result["k_skill"][i]["k_skill_name_value"] = 0;
             }
+
+            render_armor_skill();
         });
     }
 });
@@ -252,34 +239,41 @@ function slot_simplify(armor_data) {
 }
 
 function init(armor_id, armor_data) {
-    k_origin["eq_id"] = armor_id;
-    k_origin["eq_name"] = armor_data["name"];
-    k_origin["eq_skill"] = {};
-    k_origin["eq_origin_skill"] = {};
-    for (let i = 0; i < armor_data["skill"].length; i++) {
-        k_origin["eq_skill"][armor_data["skill"][i]["sname"]] = 0;
-        k_origin["eq_origin_skill"][armor_data["skill"][i]["sname"]] = armor_data["skill"][i]["lv"];
+    k_result["eq_id"] = armor_id;
+    k_result["eq_name"] = armor_data["name"];
+
+    k_result["eq_origin_skill"] = {};
+    for (let i = 0; i < k_result["eq_skill"].length; i++) {
+        k_result["eq_skill"][i] = { sname: "", lv: { origin: 0, delta: 0 } };
     }
-    k_origin["eq_skill_available"] = ARMOR_SKILL_LIMIT - Object.keys(k_origin["eq_skill"]).length;
+
+    for (let i = 0; i < armor_data["skill"].length; i++) {
+        let armor_skill = armor_data["skill"][i];
+        k_result["eq_origin_skill"][armor_skill["sname"]] = armor_skill["lv"];
+        k_result["eq_skill"][i]["sname"] = armor_skill["sname"];
+        k_result["eq_skill"][i]["lv"]["origin"] = armor_skill["lv"];
+    }
+    k_result["eq_skill_available"] = ARMOR_SKILL_LIMIT - Object.keys(k_result["eq_origin_skill"]).length;
 
     let eq_position = document.getElementById("armor_pos").value.split("_");
-    k_origin["eq_pos"] = eq_position[1];
-    k_origin["eq_pos_hex"] = eq_position[0];
+    k_result["eq_pos"] = eq_position[1];
+    k_result["eq_pos_hex"] = eq_position[0];
 
     let slot = slot_simplify(armor_data);
-    k_origin["eq_slot"] = slot;
-    k_origin["eq_k_slot"] = slot;
+    k_result["eq_slot"] = slot;
+    k_result["eq_k_slot"] = slot;
 
     let armor_cost = armor_pool_cost[armor_data["id"]]["cost"];
-    k_origin["eq_cost"] = armor_cost;
-    k_origin["def"] = armor_data["bougyo_max"];
-    k_origin["def_f"] = armor_data["def_f"];
-    k_origin["def_w"] = armor_data["def_w"];
-    k_origin["def_t"] = armor_data["def_t"];
-    k_origin["def_i"] = armor_data["def_i"];
-    k_origin["def_d"] = armor_data["def_d"];
+    k_result["eq_cost"] = armor_cost;
 
-    k_result = JSON.parse(JSON.stringify(k_origin));
+    k_result["eq_pool_id"] = armor_pool_cost[armor_data["id"]]["pool"];
+
+    k_result["def"]["origin"] = armor_data["bougyo_max"];
+    k_result["def_f"]["origin"] = armor_data["def_f"];
+    k_result["def_w"]["origin"] = armor_data["def_w"];
+    k_result["def_t"]["origin"] = armor_data["def_t"];
+    k_result["def_i"]["origin"] = armor_data["def_i"];
+    k_result["def_d"]["origin"] = armor_data["def_d"];
 
     render_armor_slot(slot);
     render_armor_def();
@@ -354,15 +348,51 @@ function k_slot_simple_add(k_skill_hex, idx) {
 }
 
 function render_armor_skill() {
+    let sname_list = {}; // {"sname": 0 }
+    for (let j = 0; j < 7; j++) {
+        let k_skill = k_result["k_skill"][j];
+        let sname = k_skill["k_skill_name"];
+        if (k_skill["k_skill_hex"] == "95" && Object.keys(k_result["eq_origin_skill"]).includes(sname)) {
+            if (sname_list[sname] === undefined) {
+                sname_list[sname] = -1;
+            } else {
+                sname_list[sname] -= 1;
+            }
+        } else if (SKILL_ADD_HEX.includes(k_skill["k_skill_hex"])) {
+            if (sname_list[sname] === undefined) {
+                sname_list[sname] = 1;
+            } else {
+                sname_list[sname] += 1;
+            }
+        }
+    }
+
+    console.log(sname_list);
+
+    for (let j = 0; j < k_result["eq_skill"].length; j++){
+        let eq_skill = k_result["eq_skill"][j];
+        if (Object.keys(sname_list).includes(eq_skill["sname"])) {
+            eq_skill["lv"]["delta"] = sname_list[eq_skill["sname"]];
+        } else if (false) {
+
+        }
+        else {
+            eq_skill["lv"]["delta"] = 0;
+        }
+    }
+
     var div_armor_skill = document.getElementById("armor_skill");
     div_armor_skill.replaceChildren();
-    for ([k, v] of Object.entries(k_result["eq_skill"])) {
-        let lv = k_result["eq_skill"][k] + (k_result["eq_origin_skill"][k] || 0);
-        let skill = `${k}+${lv}`;
-        let skill_node = document.createElement("li");
-        skill_node.className = "list-group-item";
-        skill_node.textContent = skill;
-        div_armor_skill.append(skill_node);
+    for (let i = 0; i < k_result["eq_skill"].length; i++) {
+        let skill = k_result["eq_skill"][i];
+        if (skill["sname"] != "") {
+            let lv = skill["lv"]["origin"] + skill["lv"]["delta"];
+            let skill_text = `${skill["sname"]}+${lv}`;
+            let skill_node = document.createElement("li");
+            skill_node.className = "list-group-item";
+            skill_node.textContent = skill_text;
+            div_armor_skill.append(skill_node);
+        }
     }
 }
 
@@ -378,7 +408,7 @@ function render_armor_def() {
         let k_skill_def_hex = k_result["k_skill"][i]["k_skill_hex"];
         if (DEF_MAP.includes(k_skill_def_hex)) {
             let v_def = k_skill_def_map[k_skill_def_hex];
-            let def_value = v_def["pool"][`${k_origin["eq_pool_id"]}`];
+            let def_value = v_def["pool"][`${k_result["eq_pool_id"]}`];
             switch (v_def["type"]) {
                 case "def":
                     def += def_value;
@@ -411,19 +441,19 @@ function render_armor_def() {
     let div_def_i = document.getElementById("def_i");
     let div_def_d = document.getElementById("def_d");
 
-    k_result["def"]   =  def;
-    k_result["def_f"] =  def_f;
-    k_result["def_w"] =  def_w;
-    k_result["def_t"] =  def_t;
-    k_result["def_i"] =  def_i;
-    k_result["def_d"] =  def_d;
+    k_result["def"]["delta"]   =  def;
+    k_result["def_f"]["delta"] =  def_f;
+    k_result["def_w"]["delta"] =  def_w;
+    k_result["def_t"]["delta"] =  def_t;
+    k_result["def_i"]["delta"] =  def_i;
+    k_result["def_d"]["delta"] =  def_d;
 
-    div_def.textContent   = `防御: ${k_origin["def"] + k_result["def"]}`;
-    div_def_f.textContent = `火: ${k_origin["def_f"] + k_result["def_f"]}`;
-    div_def_w.textContent = `水: ${k_origin["def_w"] + k_result["def_w"]}`;
-    div_def_t.textContent = `雷: ${k_origin["def_t"] + k_result["def_t"]}`;
-    div_def_i.textContent = `氷: ${k_origin["def_i"] + k_result["def_i"]}`;
-    div_def_d.textContent = `龍: ${k_origin["def_d"] + k_result["def_d"]}`;
+    div_def.textContent   = `防御: ${k_result["def"]["origin"] + k_result["def"]["delta"]}(${k_result["def"]["delta"]})`;
+    div_def_f.textContent = `火: ${k_result["def_f"]["origin"] + k_result["def_f"]["delta"]}(${k_result["def_f"]["delta"]})`;
+    div_def_w.textContent = `水: ${k_result["def_w"]["origin"] + k_result["def_w"]["delta"]}(${k_result["def_w"]["delta"]})`;
+    div_def_t.textContent = `雷: ${k_result["def_t"]["origin"] + k_result["def_t"]["delta"]}(${k_result["def_t"]["delta"]})`;
+    div_def_i.textContent = `氷: ${k_result["def_i"]["origin"] + k_result["def_i"]["delta"]}(${k_result["def_i"]["delta"]})`;
+    div_def_d.textContent = `龍: ${k_result["def_d"]["origin"] + k_result["def_d"]["delta"]}(${k_result["def_d"]["delta"]})`;
 }
 
 function render_armor_slot(slot) {
@@ -440,19 +470,20 @@ function render_armor_cost() {
 
 function genExport () {
     let armor_name = k_result["eq_name"];
-    let def = k_result["def"];
-    let def_f = k_result["def_f"];
-    let def_w = k_result["def_w"];
-    let def_t = k_result["def_t"];
-    let def_i = k_result["def_i"];
-    let def_d = k_result["def_d"];
+    let def = k_result["def"]["delta"];
+    let def_f = k_result["def_f"]["delta"];
+    let def_w = k_result["def_w"]["delta"];
+    let def_t = k_result["def_t"]["delta"];
+    let def_i = k_result["def_i"]["delta"];
+    let def_d = k_result["def_d"]["delta"];
     let k_eq_slot = k_result["eq_k_slot"].split("");
     let slot_delta_list = k_result["eq_slot"].split("").map(function (item, idx) {
         return parseInt(k_eq_slot[idx]) - parseInt(item);
     });
     let k_skill = "";
-    for ([k, v] of Object.entries(k_result["eq_skill"])){
-        k_skill += `${k},${v},`;
+    for (let i = 0; i < k_result["eq_skill"].length; i++){
+        let skill = k_result["eq_skill"][i];
+        k_skill += `${skill["sname"]},${skill["lv"]["delta"]},`;
     }
 
     let export_str = `${armor_name},${def},${def_f},${def_w},${def_t},${def_i},${def_d},${slot_delta_list[0]},${slot_delta_list[1]},${slot_delta_list[2]},${k_skill}`
