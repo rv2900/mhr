@@ -38,6 +38,7 @@ var k_result = {
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
     ]};
+    
 
 // fill armor position <select>
 armor_pos = document.getElementById("armor_pos");
@@ -246,6 +247,10 @@ function init(armor_id, armor_data) {
     k_result["eq_skill"] = {};
     k_result["eq_origin_skill_set"].clear();
     k_result["eq_skill_set"].clear();
+
+    for (let i = 0; i < 7; i++) {
+        k_result["k_skill"][i] = { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 };
+    }
 
     for (let i = 0; i < armor_data["skill"].length; i++) {
         let armor_skill = armor_data["skill"][i];
