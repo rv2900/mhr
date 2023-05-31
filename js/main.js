@@ -23,14 +23,12 @@ var k_result = {
     eq_origin_skill: {
     // "skill name": origin level,
     },
-    eq_skill: [
-        { sname: "", lv: { origin: 0, delta: 0 } },
-        { sname: "", lv: { origin: 0, delta: 0 } },
-        { sname: "", lv: { origin: 0, delta: 0 } },
-        { sname: "", lv: { origin: 0, delta: 0 } },
-        { sname: "", lv: { origin: 0, delta: 0 } },
-    ],
-    eq_skill_available: 0,
+    eq_origin_skill_set: new Set(),
+    eq_skill_set: new Set(),
+    
+    eq_skill: {
+    // "skill name": level,
+    },
     k_skill: [
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
@@ -165,15 +163,17 @@ armor_sel.addEventListener("change", (event) => {
                         render_armor_skill();
                         return;
                     }
-                    
-                    k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
-                    k_result["k_skill"][i]["k_skill_name"] = skill_name;
-                    k_result["k_skill"][i]["k_skill_name_value"] = 1;
-                    
-                    for (let i = 0; i < 7; i++){
-                        console.log(`${i}: ${k_result["k_skill"][i]["k_skill_name"]} ${k_result["k_skill"][i]["k_skill_name_value"]}`);
+
+                    if (k_result["eq_skill_set"].size < ARMOR_SKILL_LIMIT || k_result["eq_skill_set"].has(skill_name)) {
+                        k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
+                        k_result["k_skill"][i]["k_skill_name"] = skill_name;
+                        k_result["k_skill"][i]["k_skill_name_value"] = 1;
+                        k_result["eq_skill_set"].add(skill_name);
+                    } else {
+                        alert("only 5 unique armor skills");
+                        sel_armor_new_skill.options[0].selected = true;
                     }
-        
+
                     render_armor_skill();
                 });
             } else {
@@ -243,17 +243,16 @@ function init(armor_id, armor_data) {
     k_result["eq_name"] = armor_data["name"];
 
     k_result["eq_origin_skill"] = {};
-    for (let i = 0; i < k_result["eq_skill"].length; i++) {
-        k_result["eq_skill"][i] = { sname: "", lv: { origin: 0, delta: 0 } };
-    }
+    k_result["eq_skill"] = {};
+    k_result["eq_origin_skill_set"].clear();
+    k_result["eq_skill_set"].clear();
 
     for (let i = 0; i < armor_data["skill"].length; i++) {
         let armor_skill = armor_data["skill"][i];
         k_result["eq_origin_skill"][armor_skill["sname"]] = armor_skill["lv"];
-        k_result["eq_skill"][i]["sname"] = armor_skill["sname"];
-        k_result["eq_skill"][i]["lv"]["origin"] = armor_skill["lv"];
+        k_result["eq_origin_skill_set"].add(armor_skill["sname"]);
+        // k_result["eq_skill_set"].add(armor_skill["sname"]);
     }
-    k_result["eq_skill_available"] = ARMOR_SKILL_LIMIT - Object.keys(k_result["eq_origin_skill"]).length;
 
     let eq_position = document.getElementById("armor_pos").value.split("_");
     k_result["eq_pos"] = eq_position[1];
@@ -348,52 +347,43 @@ function k_slot_simple_add(k_skill_hex, idx) {
 }
 
 function render_armor_skill() {
-    let sname_list = {}; // {"sname": 0 }
+    k_result["eq_skill"] = {}; // {"sname": 0 }
     for (let j = 0; j < 7; j++) {
         let k_skill = k_result["k_skill"][j];
         let sname = k_skill["k_skill_name"];
-        if (k_skill["k_skill_hex"] == "95" && Object.keys(k_result["eq_origin_skill"]).includes(sname)) {
-            if (sname_list[sname] === undefined) {
-                sname_list[sname] = -1;
+        if (k_skill["k_skill_hex"] == "95" && k_result["eq_origin_skill_set"].has(sname)) {
+            if (k_result["eq_skill"][sname] === undefined) {
+                k_result["eq_skill"][sname] = -1;
             } else {
-                sname_list[sname] -= 1;
+                k_result["eq_skill"][sname] -= 1;
             }
         } else if (SKILL_ADD_HEX.includes(k_skill["k_skill_hex"])) {
-            if (sname_list[sname] === undefined) {
-                sname_list[sname] = 1;
+            if (k_result["eq_skill"][sname] === undefined) {
+                k_result["eq_skill"][sname] = 1;
             } else {
-                sname_list[sname] += 1;
+                k_result["eq_skill"][sname] += 1;
             }
         }
     }
 
-    console.log(sname_list);
-
-    for (let j = 0; j < k_result["eq_skill"].length; j++){
-        let eq_skill = k_result["eq_skill"][j];
-        if (Object.keys(sname_list).includes(eq_skill["sname"])) {
-            eq_skill["lv"]["delta"] = sname_list[eq_skill["sname"]];
-        } else if (false) {
-
-        }
-        else {
-            eq_skill["lv"]["delta"] = 0;
+    k_result["eq_skill_set"] = new Set(k_result["eq_origin_skill_set"]);
+    for (let k in k_result["eq_skill"]) {
+        if (!k_result["eq_origin_skill_set"].has(k)) {
+            k_result["eq_skill_set"].add(k);
         }
     }
 
     var div_armor_skill = document.getElementById("armor_skill");
     div_armor_skill.replaceChildren();
-    for (let i = 0; i < k_result["eq_skill"].length; i++) {
-        let skill = k_result["eq_skill"][i];
-        if (skill["sname"] != "") {
-            let lv = skill["lv"]["origin"] + skill["lv"]["delta"];
-            let skill_text = `${skill["sname"]}+${lv}`;
-            let skill_node = document.createElement("li");
-            skill_node.className = "list-group-item";
-            skill_node.textContent = skill_text;
-            div_armor_skill.append(skill_node);
-        }
-    }
+    k_result["eq_skill_set"].forEach(entry => {
+        let sname = entry;
+        let lv = parseInt(k_result["eq_origin_skill"][sname] || 0) + parseInt(k_result["eq_skill"][sname] || 0);
+        let skill_text = `${sname}+${lv}`;
+        let skill_node = document.createElement("li");
+        skill_node.className = "list-group-item";
+        skill_node.textContent = skill_text;
+        div_armor_skill.append(skill_node);
+    });
 }
 
 function render_armor_def() {
@@ -481,11 +471,10 @@ function genExport () {
         return parseInt(k_eq_slot[idx]) - parseInt(item);
     });
     let k_skill = "";
-    for (let i = 0; i < k_result["eq_skill"].length; i++){
-        let skill = k_result["eq_skill"][i];
-        k_skill += `${skill["sname"]},${skill["lv"]["delta"]},`;
+    for (let k in k_result["eq_skill"]) {
+        k_skill += `${k},${k_result["eq_skill"][k]},`;
     }
-
+    
     let export_str = `${armor_name},${def},${def_f},${def_w},${def_t},${def_i},${def_d},${slot_delta_list[0]},${slot_delta_list[1]},${slot_delta_list[2]},${k_skill}`
     document.getElementById("template_result").innerText = "";
     document.getElementById("template_result").innerText = export_str;
