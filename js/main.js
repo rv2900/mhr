@@ -171,7 +171,7 @@ armor_sel.addEventListener("change", (event) => {
                         k_result["k_skill"][i]["k_skill_name_value"] = 1;
                         k_result["eq_skill_set"].add(skill_name);
                     } else {
-                        alert("only 5 unique armor skills");
+                        console.log("only 5 unique armor skills");
                         sel_armor_new_skill.options[0].selected = true;
                     }
 
