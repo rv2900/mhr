@@ -475,9 +475,12 @@ function genExport () {
     let slot_delta_list = k_result["eq_slot"].split("").map(function (item, idx) {
         return parseInt(k_eq_slot[idx]) - parseInt(item);
     });
-    let k_skill = "";
-    for (let k in k_result["eq_skill"]) {
-        k_skill += `${k},${k_result["eq_skill"][k]},`;
+    let k_skill = [];
+    for (let i = 0; i < ARMOR_SKILL_LIMIT; i++) {
+        let sname = Object.keys(k_result["eq_skill"])[i] || "";
+        let lv = k_result["eq_skill"][sname] || "";
+        k_skill.push(sname);
+        k_skill.push(lv);
     }
     
     let export_str = `${armor_name},${def},${def_f},${def_w},${def_t},${def_i},${def_d},${slot_delta_list[0]},${slot_delta_list[1]},${slot_delta_list[2]},${k_skill}`

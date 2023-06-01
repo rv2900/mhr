@@ -185,6 +185,12 @@ function genCharmTemplate() {
     document.getElementById("template_result").innerText = template_title + template + "\n";
 }
 
+function genExport () {
+    let export_str = `${talisman["s1"]["sname"]},${talisman["s1"]["lv"]},${talisman["s2"]["sname"]},${talisman["s2"]["lv"]},${talisman["slot_type"].split("-")}`
+    document.getElementById("template_result").innerText = "";
+    document.getElementById("template_result").innerText = export_str;
+}
+
 function copyToClipboard() {
     let content = document.getElementById("template_result").innerText;
     navigator.clipboard.writeText(content);
