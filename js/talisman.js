@@ -191,6 +191,48 @@ function genExport () {
     document.getElementById("template_result").innerText = export_str;
 }
 
+function textImport () {
+    let text_import = document.getElementById("ipt_import").value;
+    let arr_talisman = text_import.split(",");
+    talisman["s1"]["sname"] = arr_talisman[0];
+    talisman["s1"]["lv"] = arr_talisman[1];
+    talisman["s2"]["sname"] = arr_talisman[2];
+    talisman["s2"]["lv"] = arr_talisman[3];
+    talisman["slot_type"] = `${arr_talisman[4]}-${arr_talisman[5]}-${arr_talisman[6]}`;
+    talisman["slot"] = slot_list[talisman["slot_type"]];
+
+    update_form();
+
+    console.log(arr_talisman);
+    console.log(talisman);
+}
+
+function update_form() {
+    update_select(slot_sel, talisman["slot_type"]);
+
+    update_select(s1_sel, talisman["s1"]["sname"]);
+    triggerChange(s1_sel);
+    update_select(document.getElementById("skill_1_lv"), talisman["s1"]["lv"]);
+
+    update_select(s2_sel, talisman["s2"]["sname"]);
+    triggerChange(s2_sel);
+    update_select(document.getElementById("skill_2_lv"), talisman["s2"]["lv"]);
+}
+
+function update_select(select_id, select_text) {
+    for (let i = 0; i < select_id.options.length; i++) {
+        const opt = select_id.options.item(i);
+        if (opt.innerText == select_text) {
+            opt.selected = true;
+        }
+    }
+}
+
+function triggerChange(element) {
+    let changeEvent = new Event('change');
+    element.dispatchEvent(changeEvent);
+}
+
 function copyToClipboard() {
     let content = document.getElementById("template_result").innerText;
     navigator.clipboard.writeText(content);
