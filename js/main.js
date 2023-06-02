@@ -166,10 +166,12 @@ armor_sel.addEventListener("change", (event) => {
                     }
 
                     if (k_result["eq_skill_set"].size < ARMOR_SKILL_LIMIT || k_result["eq_skill_set"].has(skill_name)) {
-                        k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
-                        k_result["k_skill"][i]["k_skill_name"] = skill_name;
-                        k_result["k_skill"][i]["k_skill_name_value"] = 1;
-                        k_result["eq_skill_set"].add(skill_name);
+                        if (skill_name != "") {
+                            k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
+                            k_result["k_skill"][i]["k_skill_name"] = skill_name;
+                            k_result["k_skill"][i]["k_skill_name_value"] = 1;
+                            k_result["eq_skill_set"].add(skill_name);
+                        }
                     } else {
                         console.log("only 5 unique armor skills");
                         sel_armor_new_skill.options[0].selected = true;
@@ -373,7 +375,7 @@ function render_armor_skill() {
 
     k_result["eq_skill_set"] = new Set(k_result["eq_origin_skill_set"]);
     for (let k in k_result["eq_skill"]) {
-        if (!k_result["eq_origin_skill_set"].has(k)) {
+        if (!k_result["eq_origin_skill_set"].has(k) && k !="") {
             k_result["eq_skill_set"].add(k);
         }
     }
