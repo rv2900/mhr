@@ -73,10 +73,18 @@
                     </tbody>
                 </table>
             </div>
-            <button class="btn btn-primary" type="button" id="gen_template" onclick="genTemplate()">Gen Template</button>
-            <button class="btn btn-primary" type="button" id="gen_export" onclick="genExport()">Export</button>
-            <button class="btn btn-outline-secondary" type="button" id="copy_to_clipboard" onclick="copyToClipboard()">Copy</button>
-            <label class="text-success" id="copy_result"></label>
+            <div class="row">
+                <div class="col-sm-auto m-1">
+                    <button class="btn btn-primary" type="button" id="gen_template" onclick="genTemplate()">Gen Template</button>
+                    <button class="btn btn-primary" type="button" id="gen_export" onclick="genExport()">Export</button>
+                    <button class="btn btn-outline-secondary" type="button" id="copy_to_clipboard" onclick="copyToClipboard()">Copy</button>
+                    <label class="text-success" id="copy_result"></label>
+                </div>
+                <div class="col row m-1">
+                    <button class="btn btn-primary col-sm-auto" type="button" id="btn_import" onclick="textImport()">Import</button>
+                    <input class="form-control col" placeholder="input import text here." id="ipt_import" value="">
+                </div>
+            </div>
         </form>
         <blockquote class="blockquote" id="template_result"></blockquote>
     </div>
