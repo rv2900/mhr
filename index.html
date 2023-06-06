@@ -25,10 +25,23 @@
         </div>
         <form>
             <div class="m-1 row">
-                <label class="form-label col-sm-auto">装備を選んでください：</label>
-                <select class="form-select col" id="armor_select" name="armor_select">
-                    <option>-----</option>
-                </select>
+                <div class="col-sm-auto row">
+                    <label class="form-label col-sm-auto">部位を選んでください：</label>
+                    <select class="form-select col" id="part_select" name="part_select">
+                        <option>-----</option>
+                        <option value="1">頭</option>
+                        <option value="2">胸</option>
+                        <option value="3">腕</option>
+                        <option value="4">腰</option>
+                        <option value="5">足</option>
+                    </select>
+                </div>
+                <div class="col row">
+                    <label class="form-label col-sm-auto">装備を選んでください：</label>
+                    <select class="form-select col" id="armor_select" name="armor_select">
+                        <option>-----</option>
+                    </select>
+                </div>
             </div>
             <div class="m-1 row">
                 <label class="form-label col-sm-auto">装備ボックス位置　　：</label>

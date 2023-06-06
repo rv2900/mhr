@@ -179,7 +179,6 @@ function genCharmTemplate() {
     780F0000 00000024
     680F1000 0000000${talisman["slot"][1]} 0000000${talisman["slot"][0]}
     680F0000 0000000${talisman["slot"][3]} 0000000${talisman["slot"][2]}
-    680F0000 00000000 00000000
 `;
     
     document.getElementById("template_result").innerText = template_title + template + "\n";
