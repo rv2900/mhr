@@ -26,7 +26,7 @@ var slot_list = {
 var talisman = {
     pos: 1, //positioin 1, start 0x20, step 0x8
     slot_type: "0-0-0",
-    slot: [0, 0, 0, 0], // lv1, lv2, lv3, lv4 - [2, , 0, 1] -> 4-1-1
+    slot: [0, 0, 0, 0], // lv1, lv2, lv3, lv4 - [2, 0 , 0, 1] -> 4-1-1
     s1: {hex: "00", sname:"", lv: 0},
     s2: {hex: "00", sname:"", lv: 0},
 };
@@ -39,9 +39,6 @@ var talisman_class = {
         "Wisdom Talisman": "11",
     },
 }
-
-var talisman_resutl = {};
-
 
 slot_sel = document.getElementById("slot_select");
 for (i in slot_list) {
@@ -79,13 +76,13 @@ for (i in talisman_skill) {
     }
 }
 s1_sel.addEventListener("change", (event) => {
+    skill_check();
     let skill_id = event.target.value;
     talisman["s1"]["hex"] = parseInt(skill_id).toString(16).toUpperCase().padStart(2, "0");
     
-    s1_sel_new = document.getElementById("skill_1_lv");
-    s1_sel_new.innerHTML = `<option value="0">-----</option>`;
+    let s1_lv_sel = document.getElementById("skill_1_lv");
+    s1_lv_sel.innerHTML = `<option value="0">-----</option>`;
 
-    s1_lv_sel = document.getElementById("skill_1_lv");
     let s1_skill = talisman_skill[skill_id];
     talisman["s1"]["sname"] = s1_skill["skill_name_japanese"];
     for (i = s1_skill["s1_min"]; i <= s1_skill["s1_max"]; i++) {
@@ -111,12 +108,12 @@ for (i in talisman_skill) {
     }
 }
 s2_sel.addEventListener("change", (event) => { 
+    skill_check();
     let skill_id = event.target.value;
     talisman["s2"]["hex"] = parseInt(skill_id).toString(16).toUpperCase().padStart(2, "0");
-    s2_sel_new = document.getElementById("skill_2_lv");
-    s2_sel_new.innerHTML = `<option value="0">-----</option>`;
+    let s2_lv_sel = document.getElementById("skill_2_lv");
+    s2_lv_sel.innerHTML = `<option value="0">-----</option>`;
 
-    s2_lv_sel = document.getElementById("skill_2_lv");
     let s2_skill = talisman_skill[skill_id];
     talisman["s2"]["sname"] = s2_skill["skill_name_japanese"];
     for (i = s2_skill["s2_min"]; i <= s2_skill["s2_max"]; i++) {
@@ -132,8 +129,8 @@ s2_sel.addEventListener("change", (event) => {
 });
 
 function skill_check() {
-    let s1 = document.getElementById(s1_sel.options.selectedIndex).value;
-    let s2 = document.getElementById(s2_sel.options.selectedIndex).value;
+    let s1 = s1_sel.options[s1_sel.selectedIndex].text;
+    let s2 = s2_sel.options[s2_sel.selectedIndex].text;
     if (s1 == s2) {
         console.log("fuck");
     }

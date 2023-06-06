@@ -511,3 +511,46 @@ function genExport () {
     document.getElementById("template_result").innerText = "";
     document.getElementById("template_result").innerText = export_str;
 }
+
+function textImport () {
+    let text_import = document.getElementById("ipt_import").value;
+    text_import = "冥淵纏鎧イレエピヌ,-18,0,-1,0,0,0,0,2,1,逆恨み,-1,風纏,1,,,,,,";
+    let arr_armor = text_import.split(",");
+    
+    k_result["eq_name"] = arr_armor[0];
+    k_result["def"]["delta"] = arr_armor[1];
+    k_result["def_f"]["delta"] = arr_armor[2];
+    k_result["def_w"]["delta"] = arr_armor[3];
+    k_result["def_t"]["delta"] = arr_armor[4];
+    k_result["def_i"]["delta"] = arr_armor[5];
+    k_result["def_d"]["delta"] = arr_armor[6];
+    k_result["eq_k_slot"] = `${arr_armor[7]}${arr_armor[8]}${arr_armor[9]}`;
+    k_result["eq_skill"][arr_armor[10]] = arr_armor[11];
+    k_result["eq_skill"][arr_armor[12]] = arr_armor[13];
+    k_result["eq_skill"][arr_armor[14]] = arr_armor[15];
+    k_result["eq_skill"][arr_armor[16]] = arr_armor[17];
+    k_result["eq_skill"][arr_armor[18]] = arr_armor[19];
+
+    update_form();
+
+    console.log(arr_armor);
+    console.log(k_result);
+}
+
+function update_form() {
+    
+}
+
+function update_select(select_id, select_text) {
+    for (let i = 0; i < select_id.options.length; i++) {
+        const opt = select_id.options.item(i);
+        if (opt.innerText == select_text) {
+            opt.selected = true;
+        }
+    }
+}
+
+function triggerChange(element) {
+    let changeEvent = new Event('change');
+    element.dispatchEvent(changeEvent);
+}
