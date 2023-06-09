@@ -1,9 +1,10 @@
 var version_list = {
     "15.0.0": "129E11D8",
     "15.0.1": "129E11F8",
+    "16.0.0": "12A4FD80",
 }
 
-var version_code = version_list["15.0.1"];
+var version_code = version_list["16.0.0"];
 
 var slot_list = {
     "4-1-1": [2, 0, 0, 1],

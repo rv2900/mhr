@@ -1,4 +1,8 @@
 // armor skill item limit to 5,
+const VERSION_CODE = {
+    "15.0.1": "129E11F8",
+    "16.0.0": "12A4FD80",
+}
 const ARMOR_SKILL_LIMIT = 5;
 
 const DEF_MAP = Object.keys(k_skill_def_map);
@@ -219,9 +223,8 @@ function genTemplate() {
         index = i / 8 - 4;
         k_skill_hex = k_result["k_skill"][index]["k_skill_hex"];
         k_skill_edit_hex = k_result["k_skill"][index]["k_skill_edit_hex"];
-        version_code = "129E11F8";   // version update code
         let template_block =`
-580F0000 ${version_code}
+580F0000 ${VERSION_CODE["16.0.0"]}
 580F1000 00000088
 580F1000 00000028
 580F1000 00000010

@@ -140,5 +140,6 @@ armor_pool_cost = {
   "500": { pool: 6,	cost: 10 },
   "501": { pool: 6,	cost: 10 },
   "506": { pool: 6,	cost: 10 },
-  "504": { pool: 5,	cost: 12 },
+  "504": { pool: 5, cost: 12 },
+  "502": { pool: 6,	cost: 10 },
 };

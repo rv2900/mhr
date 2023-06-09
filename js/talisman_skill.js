@@ -133,6 +133,6 @@ talisman_skill = {
     "138": {skill_name_japanese: "風纏", skill_name_chinese: "风绕", skill_name_english: "Wind Mantle", rank:"A", skill_max: 3, s1_min: 0, s1_max: 3, s2_min: 0, s2_max: 2},
     "139": {skill_name_japanese: "粉塵纏", skill_name_chinese: "粉尘绕", skill_name_english: "Powder Mantle", rank:"A", skill_max: 3, s1_min: 0, s1_max: 3, s2_min: 0, s2_max: 2},
     "140": {skill_name_japanese: "冰気錬成", skill_name_chinese: "寒气炼成", skill_name_english: "Frostcraft", rank:"A", skill_max: 3, s1_min: 0, s1_max: 3, s2_min: 0, s2_max: 2},
-    "141": {skill_name_japanese: "龍気変換", skill_name_chinese: "龙气转换", skill_name_english: "Dragon Conversion", rank:"A", skill_max: 3, s1_min: 0, s1_max: 3, s2_min: 0, s2_max: 2},
-    
+    "141": {skill_name_japanese: "龍気変換", skill_name_chinese: "龙气转换", skill_name_english: "Dragon Conversion", rank: "A", skill_max: 3, s1_min: 0, s1_max: 3, s2_min: 0, s2_max: 2 },
+    "143": {skill_name_japanese: "狂竜症【翔】", skill_name_chinese: "狂龙症【翔】", skill_name_english: "Frenzied Bloodlust", rank:"A", skill_max: 3, s1_min: 0, s1_max: 3, s2_min: 0, s2_max: 2},
 }
