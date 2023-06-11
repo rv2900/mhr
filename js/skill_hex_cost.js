@@ -60,6 +60,7 @@ skill_hex_cost = {
     "風纏": { hex: "8A", cost: 9 },
     "粉塵纏": { hex: "8B", cost: 9 },
     "奮闘": { hex: "91", cost: 9 },
+    "狂竜症【翔】": { hex: "8F", cost: 9 },
 
     "毒属性強化": { hex: "12", cost: 6 },
     "麻痺属性強化": { hex: "13", cost: 6 },
@@ -145,7 +146,6 @@ skill_hex_cost = {
     "風雷合一": { hex: "6F", cost: -99 },
     "伏魔響命": { hex: "71", cost: -99 },
     "天衣無崩": { hex: "8E", cost: -99 },
-    "狂竜症【翔】": { hex: "8F", cost: -99 },
     "狂化": { hex: "89", cost: -99 },
     "血氣覚醒": { hex: "90", cost: -99 },
 }

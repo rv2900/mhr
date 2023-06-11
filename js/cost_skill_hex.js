@@ -34,7 +34,6 @@ cost_skill_hex = {
     { sname: "蓄積時攻撃強化", hex: "88" },
     { sname: "冰気錬成", hex: "8C" },
     { sname: "龍気変換", hex: "8D" },
-    { sname: "狂竜症【翔】", hex: "8F" },
     ],
     "9": [
     { sname: "会心撃【属性】", hex: "0B" },
@@ -63,7 +62,8 @@ cost_skill_hex = {
     { sname: "状態異常確定蓄積", hex: "86"},
     { sname: "風纏", hex: "8A"},
     { sname: "粉塵纏", hex: "8B"},
-    { sname: "奮闘", hex: "91"},
+    { sname: "奮闘", hex: "91" },
+    { sname: "狂竜症【翔】", hex: "8F" },
     ],
     "6": [
     { sname: "毒属性強化", hex: "12" },
