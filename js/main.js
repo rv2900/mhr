@@ -127,7 +127,13 @@ armor_sel.addEventListener("change", (event) => {
                     let sname = j;
                     let slv = k_result["eq_origin_skill"][j];
                     opt.text = sname + "+" + slv;
-                    let skill_hex = skill_hex_cost[sname]["hex"];
+                    let skill_hex = "00";
+                    for (let k in skill_list) {
+                        // k : skill id
+                        if (skill_list[k]["skill_name_japanese"] == sname) {
+                            skill_hex = parseInt(k).toString(16).toUpperCase().padStart(2, "0");
+                        }
+                    }
                     opt.value = `${skill_hex}`;
                     sel_armor_original_skill.appendChild(opt);
                 }
@@ -155,14 +161,17 @@ armor_sel.addEventListener("change", (event) => {
             } else if (SKILL_ADD_HEX.includes(k_skill_hex)) {
                 sel_armor_new_skill = document.getElementById(`armor_new_skill_${i}`);
                 sel_armor_new_skill.innerHTML = `<option value=\"00\">-----</option>`;
-                cost_skill_list = cost_skill_hex[t_values[1]];
-                for (let j in cost_skill_list) {
-                    let opt = document.createElement("option")
-                    let sname = cost_skill_list[j]["sname"];
-                    let skill_hex = cost_skill_list[j]["hex"];
-                    opt.value = `${skill_hex}`;
-                    opt.text = sname;
-                    sel_armor_new_skill.appendChild(opt);
+                let cost = t_values[1];
+
+                for (let k in skill_list) {
+                    if (skill_list[k]["skill_cost"] == cost) {
+                        let opt = document.createElement("option")
+                        let sname = skill_list[k]["skill_name_japanese"];
+                        let skill_hex = parseInt(k).toString(16).toUpperCase().padStart(2, "0");;
+                        opt.value = `${skill_hex}`;
+                        opt.text = sname;
+                        sel_armor_new_skill.appendChild(opt);
+                    }
                 }
                 sel_armor_new_skill.addEventListener("change", (event) => {
                     let skill_edit_hex = event.target.value
@@ -535,9 +544,6 @@ function textImport () {
     k_result["eq_skill"][arr_armor[18]] = arr_armor[19];
 
     update_form();
-
-    console.log(arr_armor);
-    console.log(k_result);
 }
 
 function update_form() {

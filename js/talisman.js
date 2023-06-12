@@ -67,11 +67,11 @@ talisman_pos_sel.addEventListener("change", (event) => {
 });
 
 s1_sel = document.getElementById("skill_1");
-for (i in talisman_skill) {
-    let o = talisman_skill[i];
+for (let k in skill_list) {
+    let o = skill_list[k];
     if (o["s1_min"] != -1) {
         let opt = document.createElement("option");
-        opt.value = i;
+        opt.value = k;
         opt.text = o["skill_name_japanese"];
         s1_sel.appendChild(opt);
     }
@@ -84,7 +84,7 @@ s1_sel.addEventListener("change", (event) => {
     let s1_lv_sel = document.getElementById("skill_1_lv");
     s1_lv_sel.innerHTML = `<option value="0">-----</option>`;
 
-    let s1_skill = talisman_skill[skill_id];
+    let s1_skill = skill_list[skill_id];
     talisman["s1"]["sname"] = s1_skill["skill_name_japanese"];
     for (i = s1_skill["s1_min"]; i <= s1_skill["s1_max"]; i++) {
         if (i == 0) continue;
@@ -99,11 +99,11 @@ s1_sel.addEventListener("change", (event) => {
 });
 
 s2_sel = document.getElementById("skill_2");
-for (i in talisman_skill) {
-    let o = talisman_skill[i];
+for (let k in skill_list) {
+    let o = skill_list[k];
     if (o["s2_min"] != -1) {
         let opt = document.createElement("option");
-        opt.value = i;
+        opt.value = k;
         opt.text = o["skill_name_japanese"];
         s2_sel.appendChild(opt);
     }
@@ -115,7 +115,7 @@ s2_sel.addEventListener("change", (event) => {
     let s2_lv_sel = document.getElementById("skill_2_lv");
     s2_lv_sel.innerHTML = `<option value="0">-----</option>`;
 
-    let s2_skill = talisman_skill[skill_id];
+    let s2_skill = skill_list[skill_id];
     talisman["s2"]["sname"] = s2_skill["skill_name_japanese"];
     for (i = s2_skill["s2_min"]; i <= s2_skill["s2_max"]; i++) {
         if (i == 0) continue;
