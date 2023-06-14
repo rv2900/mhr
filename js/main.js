@@ -19,19 +19,19 @@ var k_result = {
     eq_k_slot: "000",
     eq_cost: 0,
     eq_pool_id: 0,
-    def  : { origin: 0, delta: 0 },
+    def: { origin: 0, delta: 0 },
     def_f: { origin: 0, delta: 0 },
     def_w: { origin: 0, delta: 0 },
     def_t: { origin: 0, delta: 0 },
     def_i: { origin: 0, delta: 0 },
     def_d: { origin: 0, delta: 0 },
     eq_origin_skill: {
-    // "skill name": origin level,
+        // "skill name": origin level,
     },
     eq_origin_skill_set: new Set(),
     eq_skill_set: new Set(),
     eq_skill: {
-    // "skill name": level,
+        // "skill name": level,
     },
     k_skill: [
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
@@ -41,7 +41,8 @@ var k_result = {
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
         { k_skill_hex: "00", k_skill_edit_hex: "00", k_skill_name: "", k_skill_name_value: 0, k_skill_cost: 0 },
-    ]};
+    ]
+};
 
 // fill armor position <select>
 armor_pos = document.getElementById("armor_pos");
@@ -54,7 +55,7 @@ for (let i = 0; i < 10; i++) {
     opt.text = `${eq_pos}`;
     armor_pos.appendChild(opt);
 }
-armor_pos.addEventListener("change", (event) => { 
+armor_pos.addEventListener("change", (event) => {
     let eq_position = event.target.value.split("_");
     k_result["eq_pos"] = eq_position[1];
     k_result["eq_pos_hex"] = eq_position[0];
@@ -78,6 +79,7 @@ part_sel.addEventListener("change", (event) => {
             armor_sel.appendChild(opt);
         }
     }
+    armor_sel.disabled = false;
 });
 
 armor_sel.addEventListener("change", (event) => {
@@ -91,6 +93,7 @@ armor_sel.addEventListener("change", (event) => {
 
     for (let i = 0; i < 7; i++) {
         let k_skill_sel = document.getElementById(`k_skill_${i}`);
+        k_skill_sel.disabled = false;
         k_skill_sel.innerHTML = `<option value="00_0">-----</option>`;
         for (let j in k_skills) {
             let opt = document.createElement("option");
@@ -116,11 +119,12 @@ armor_sel.addEventListener("change", (event) => {
             let k_slot_simple = k_slot_simple_add(k_skill_hex, i);
             k_result["eq_k_slot"] = k_slot_simple.join("");
             render_armor_slot(`${k_result["eq_slot"]} >>> ${k_result["eq_k_slot"]}`);
-            // todo: add function to walk through k_skill_0 ~ 6 to see whether add slot skill existed.
             // skill delete hex: 0x95
             if (k_skill_hex == "95") {
                 sel_armor_original_skill = document.getElementById(`armor_original_skill_${i}`);
                 sel_armor_original_skill.innerHTML = `<option value=\"00\">-----</option>`;
+                sel_armor_original_skill.disabled = false;
+                document.getElementById(`armor_new_skill_${i}`).disabled = true;
 
                 for (let j in k_result["eq_origin_skill"]) {
                     let opt = document.createElement("option");
@@ -157,10 +161,11 @@ armor_sel.addEventListener("change", (event) => {
                     render_armor_skill();
 
                 });
-            // skill add hex: 0x90 to 0x94
+                // skill add hex: 0x90 to 0x94
             } else if (SKILL_ADD_HEX.includes(k_skill_hex)) {
                 sel_armor_new_skill = document.getElementById(`armor_new_skill_${i}`);
                 sel_armor_new_skill.innerHTML = `<option value=\"00\">-----</option>`;
+                sel_armor_new_skill.disabled = false;
                 let cost = t_values[1];
 
                 for (let k in skill_list) {
@@ -175,7 +180,8 @@ armor_sel.addEventListener("change", (event) => {
                 }
                 sel_armor_new_skill.addEventListener("change", (event) => {
                     let skill_edit_hex = event.target.value
-                    let skill_name = sel_armor_new_skill.options[sel_armor_new_skill.selectedIndex].text;
+                    // let skill_name = sel_armor_new_skill.options[sel_armor_new_skill.selectedIndex].text;
+                    let skill_name = document.querySelector(`#armor_new_skill_${i} option:checked`).text;
                     if (skill_edit_hex == "00") {
                         k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                         k_result["k_skill"][i]["k_skill_name"] = "";
@@ -184,8 +190,8 @@ armor_sel.addEventListener("change", (event) => {
                         return;
                     }
 
-                    
                     if (k_result["eq_skill_set"].size < ARMOR_SKILL_LIMIT) {
+                        console.log(skill_name);
                         if (skill_name != "" && skill_name != "-----") {
                             k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
                             k_result["k_skill"][i]["k_skill_name"] = skill_name;
@@ -195,14 +201,22 @@ armor_sel.addEventListener("change", (event) => {
                             if (k_result["eq_skill_set"].has(skill_name)) {
                                 k_result["eq_skill"][skill_name] += 1;
                             }
+
                         }
                     } else if (k_result["eq_skill_set"].size == ARMOR_SKILL_LIMIT) {
+                        console.log(skill_name);
+                        k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
+                        k_result["k_skill"][i]["k_skill_name"] = skill_name;
+                        k_result["k_skill"][i]["k_skill_name_value"] = 1;
+                        update_eq_skill();
                         if (k_result["eq_skill_set"].has(skill_name)) {
-                            k_result["k_skill"][i]["k_skill_edit_hex"] = skill_edit_hex;
-                            k_result["k_skill"][i]["k_skill_name"] = skill_name;
-                            k_result["k_skill"][i]["k_skill_name_value"] = 1;
-                            update_eq_skill();
                             k_result["eq_skill"][skill_name] += 1;
+                        } else {
+                            k_result["k_skill"][i]["k_skill_edit_hex"] = "00";
+                            k_result["k_skill"][i]["k_skill_name"] = "";
+                            k_result["k_skill"][i]["k_skill_name_value"] = 0;
+                            console.log("only 5 unique armor skills");
+                            sel_armor_new_skill.options[0].selected = true;
                         }
                     } else {
                         console.log("only 5 unique armor skills");
@@ -212,6 +226,8 @@ armor_sel.addEventListener("change", (event) => {
                     render_armor_skill();
                 });
             } else {
+                document.getElementById(`armor_original_skill_${i}`).disabled = true;
+                document.getElementById(`armor_new_skill_${i}`).disabled = true;
                 k_result["k_skill"][i]["k_skill_edit_hex"] = "00";
                 k_result["k_skill"][i]["k_skill_name"] = "";
                 k_result["k_skill"][i]["k_skill_name_value"] = 0;
@@ -226,13 +242,13 @@ function genTemplate() {
     let template_title = `[ 錬成No.${k_result["eq_pos"]}位置： ${k_result["eq_name"]} ]`;
     // k_skill_step start at 0x20, step 8, max 0x50, total 7 items
     let template = "";
-    
+
     for (i = 32; i < 88; i += 8) {
         k_skill_step = i.toString(16);
         index = i / 8 - 4;
         k_skill_hex = k_result["k_skill"][index]["k_skill_hex"];
         k_skill_edit_hex = k_result["k_skill"][index]["k_skill_edit_hex"];
-        let template_block =`
+        let template_block = `
 580F0000 ${VERSION_CODE["16.0.0"]}
 580F1000 00000088
 580F1000 00000028
@@ -342,7 +358,7 @@ function k_slot_simple_add(k_skill_hex, idx) {
             v = 0;
     }
     // check other k_skill item whether slot add skill
-    for (let i = 0; i < 7; i++){
+    for (let i = 0; i < 7; i++) {
         if (i != idx) {
             let slot_add_value = k_result["k_skill"][i]["k_skill_hex"];
             switch (slot_add_value) {
@@ -389,26 +405,30 @@ function update_eq_skill() {
     for (let j = 0; j < 7; j++) {
         let k_skill = k_result["k_skill"][j];
         let sname = k_skill["k_skill_name"];
-        if (k_skill["k_skill_hex"] == "95" && k_result["eq_origin_skill_set"].has(sname)) {
-            if (k_result["eq_skill"][sname] === undefined) {
-                k_result["eq_skill"][sname] = -1;
-            } else {
-                k_result["eq_skill"][sname] -= 1;
-            }
-        } else if (SKILL_ADD_HEX.includes(k_skill["k_skill_hex"])) {
-            if (k_result["eq_skill"][sname] === undefined) {
-                k_result["eq_skill"][sname] = 1;
-            } else {
-                k_result["eq_skill"][sname] += 1;
+
+        if (sname !== "") {
+            if (k_skill["k_skill_hex"] == "95" && k_result["eq_origin_skill_set"].has(sname)) {
+                if (k_result["eq_skill"][sname] === undefined) {
+                    k_result["eq_skill"][sname] = -1;
+                } else {
+                    k_result["eq_skill"][sname] -= 1;
+                }
+            } else if (SKILL_ADD_HEX.includes(k_skill["k_skill_hex"])) {
+                if (k_result["eq_skill"][sname] === undefined) {
+                    k_result["eq_skill"][sname] = 1;
+                } else {
+                    k_result["eq_skill"][sname] += 1;
+                }
             }
         }
     }
     k_result["eq_skill_set"] = new Set(k_result["eq_origin_skill_set"]);
     for (let k in k_result["eq_skill"]) {
-        if (!k_result["eq_origin_skill_set"].has(k) && k !="") {
+        if (!k_result["eq_origin_skill_set"].has(k) && k != "" && k_result["eq_skill_set"].size < ARMOR_SKILL_LIMIT) {
             k_result["eq_skill_set"].add(k);
         }
     }
+
 }
 
 function render_armor_skill() {
@@ -428,7 +448,7 @@ function render_armor_skill() {
 }
 
 function render_armor_def() {
-    let def   = 0;
+    let def = 0;
     let def_f = 0;
     let def_w = 0;
     let def_t = 0;
@@ -465,21 +485,21 @@ function render_armor_def() {
         }
     }
 
-    let div_def   = document.getElementById("def");
+    let div_def = document.getElementById("def");
     let div_def_f = document.getElementById("def_f");
     let div_def_w = document.getElementById("def_w");
     let div_def_t = document.getElementById("def_t");
     let div_def_i = document.getElementById("def_i");
     let div_def_d = document.getElementById("def_d");
 
-    k_result["def"]["delta"]   =  def;
-    k_result["def_f"]["delta"] =  def_f;
-    k_result["def_w"]["delta"] =  def_w;
-    k_result["def_t"]["delta"] =  def_t;
-    k_result["def_i"]["delta"] =  def_i;
-    k_result["def_d"]["delta"] =  def_d;
+    k_result["def"]["delta"] = def;
+    k_result["def_f"]["delta"] = def_f;
+    k_result["def_w"]["delta"] = def_w;
+    k_result["def_t"]["delta"] = def_t;
+    k_result["def_i"]["delta"] = def_i;
+    k_result["def_d"]["delta"] = def_d;
 
-    div_def.textContent   = `防御: ${k_result["def"]["origin"] + k_result["def"]["delta"]}(${k_result["def"]["delta"]})`;
+    div_def.textContent = `防御: ${k_result["def"]["origin"] + k_result["def"]["delta"]}(${k_result["def"]["delta"]})`;
     div_def_f.textContent = `火: ${k_result["def_f"]["origin"] + k_result["def_f"]["delta"]}(${k_result["def_f"]["delta"]})`;
     div_def_w.textContent = `水: ${k_result["def_w"]["origin"] + k_result["def_w"]["delta"]}(${k_result["def_w"]["delta"]})`;
     div_def_t.textContent = `雷: ${k_result["def_t"]["origin"] + k_result["def_t"]["delta"]}(${k_result["def_t"]["delta"]})`;
@@ -499,7 +519,7 @@ function render_armor_cost() {
     document.getElementById("armor_cost").textContent = `Armor Cost: ${armor_cost}`;
 }
 
-function genExport () {
+function genExport() {
     let armor_name = k_result["eq_name"];
     let def = k_result["def"]["delta"];
     let def_f = k_result["def_f"]["delta"];
@@ -518,17 +538,17 @@ function genExport () {
         k_skill.push(sname);
         k_skill.push(lv);
     }
-    
+
     let export_str = `${armor_name},${def},${def_f},${def_w},${def_t},${def_i},${def_d},${slot_delta_list[0]},${slot_delta_list[1]},${slot_delta_list[2]},${k_skill}`
     document.getElementById("template_result").innerText = "";
     document.getElementById("template_result").innerText = export_str;
 }
 
-function textImport () {
+function textImport() {
     let text_import = document.getElementById("ipt_import").value;
     text_import = "冥淵纏鎧イレエピヌ,-18,0,-1,0,0,0,0,2,1,逆恨み,-1,風纏,1,,,,,,";
     let arr_armor = text_import.split(",");
-    
+
     k_result["eq_name"] = arr_armor[0];
     k_result["def"]["delta"] = arr_armor[1];
     k_result["def_f"]["delta"] = arr_armor[2];
@@ -547,7 +567,7 @@ function textImport () {
 }
 
 function update_form() {
-    
+
 }
 
 function update_select(select_id, select_text) {
