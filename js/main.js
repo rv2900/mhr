@@ -334,7 +334,9 @@ function init(armor_id, armor_data) {
     render_armor_cost();
 
     for (let i = 0; i < 7; i++) {
+        document.getElementById(`armor_original_skill_${i}`).disabled = true;
         document.getElementById(`armor_original_skill_${i}`).innerHTML = `<option value=\"00_${i}\">-----</option>`;
+        document.getElementById(`armor_new_skill_${i}`).disabled = true;
         document.getElementById(`armor_new_skill_${i}`).innerHTML = `<option value=\"00_${i}\">-----</option>`;
     }
 
